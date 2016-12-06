@@ -1,21 +1,27 @@
 pkg load optim
 pkg load signal
-addpath("./loaders:./lib");
+addpath("../loaders:../lib");
 close all;
 clear all;
 
 rad2deg = 180/pi;
 
-# set default run parameters
 # path to CSV files
-basePath = "";
-basePath = "/home/markw/gdrive/flightlogs/S250AQ/2016-12-05/log002/"
-startTime = 148;
-endTime = 160;
-#basePath = "/home/markw/gdrive/flightlogs/S250_pixracer/2016-08-18/sess001/log3/"
-%basePath = "/home/markw/Dropbox/Octave_sources/PX4/ulogs/AquaQuad/2016-09-17/"
-%startTime = 130;
-%endTime = 172;
+fflush (stdout);
+choice = input("load example dataset? (Y/n):", "s");
+if length(choice) == 0 || choice == 'Y' || choice == 'y'
+  basePath = "/home/markw/gdrive/flightlogs/S250AQ/2016-12-05/log002/"
+  startTime = 148;
+  endTime = 160;
+  #basePath = "/home/markw/gdrive/flightlogs/S250_pixracer/2016-08-18/sess001/log3/"
+  %basePath = "/home/markw/Dropbox/Octave_sources/PX4/ulogs/AquaQuad/2016-09-17/"
+  %startTime = 130;
+  %endTime = 172;
+else
+  basePath = "";
+endif
+
+# set default run parameters
 # desired uniform sample rate in Hz; should be less than average sample rate
 sampRate = 100
 # set to true when start/endTime are correct
@@ -38,13 +44,13 @@ for i = [1:size(files)(1)]
 endfor
 
 # load the measured rates, rate setpoints and rate controls (actuator input)
-[g0t, gyro0] = loadSensor_xyz_new(prefix, 0, basePath);
-[s0t, setpoint0] = loadVrates_xyz_new(prefix, 0, basePath);
-[c0t, control0] = loadControlGroup0_xyz_new(prefix, 0, basePath);
+[g0t, gyro0] = loadSensor_xyz(prefix, 0, basePath);
+[s0t, setpoint0] = loadVrates_xyz(prefix, 0, basePath);
+[c0t, control0] = loadControlGroup0_xyz(prefix, 0, basePath);
 
 # load the attitude quaternions and attitude setpoints
 [q0t, q0] = loadAttitude_quat(prefix, 0, basePath);
-[as0t, att_sp0] = loadAttSP_xyz_new(prefix, 0, basePath);
+[as0t, att_sp0] = loadAttSP_xyz(prefix, 0, basePath);
 
 nsamples = size(gyro0)(1);
 
