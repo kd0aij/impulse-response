@@ -10,13 +10,13 @@ rad2deg = 180/pi;
 fflush (stdout);
 choice = input("load example dataset? (Y/n):", "s");
 if length(choice) == 0 || choice == 'Y' || choice == 'y'
-  basePath = "/home/markw/gdrive/flightlogs/S250AQ/2016-12-05/log002/"
-  startTime = 148;
-  endTime = 160;
+%  basePath = "/home/markw/gdrive/flightlogs/S250AQ/2016-12-05/log002/"
+%  startTime = 148;
+%  endTime = 160;
   #basePath = "/home/markw/gdrive/flightlogs/S250_pixracer/2016-08-18/sess001/log3/"
-  %basePath = "/home/markw/Dropbox/Octave_sources/PX4/ulogs/AquaQuad/2016-09-17/"
-  %startTime = 130;
-  %endTime = 172;
+  basePath = "/home/markw/Dropbox/Octave_sources/PX4/ulogs/AquaQuad/2016-09-17/"
+  startTime = 130;
+  endTime = 172;
 else
   basePath = "";
 endif
@@ -112,6 +112,7 @@ endOffset = startOffset;
 while (as0t(endOffset) < endTime) endOffset++; endwhile
 # need an extra sample at each end of the segment for cubic Hermite interpolation
 attspRange = [startOffset-1:endOffset+1];
+
 [q0tu, q0u] = resample2(startTime, endTime, q0t, q0, sampRate);
 [as0tu, att_sp0u] = resample2(startTime, endTime, as0t(attspRange), att_sp0(attspRange,:), sampRate);
 
@@ -174,10 +175,10 @@ else % accel response
   gpitchStim = pitchControl(:);
   pitchSig = pitchAccelSig;
 endif  
-keyboard
+
 # perform a least-squares fit to find the 3 parameters for the impulse response model
 # the model is h(t) = p3 exp(-p1 t) sin(p2 t)
-pin=[2, 15, 1];
+pin=[10, 26, .1];
 stol = .0001;
 niter = 50;
 fit2rng = [1:length(rollSig)]';
