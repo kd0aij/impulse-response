@@ -11,13 +11,18 @@ rad2deg = 180/pi;
 fflush (stdout);
 choice = input("load example dataset? (Y/n):", "s");
 if length(choice) == 0 || choice == 'Y' || choice == 'y'
-  basePath = "/home/markw/gdrive/flightlogs/S250AQ/2016-12-05/log002/"
-  startTime = 148;
-  endTime = 160;
-  #basePath = "/home/markw/gdrive/flightlogs/S250_pixracer/2016-08-18/sess001/log3/"
-%  basePath = "/home/markw/Dropbox/Octave_sources/PX4/ulogs/AquaQuad/2016-09-17/"
-%  startTime = 130;
-%  endTime = 172;
+  choice = input("choose example [1,2]: ");
+  if choice == 1
+    basePath = "../sample_ulogs/S250AQ/2016-12-05/log002/"
+    startTime = 148
+    endTime = 160
+  elseif choice == 2
+    basePath = "../sample_ulogs/AquaQuad/2016-09-17/"
+    startTime = 167
+    endTime = 178
+  else
+    basePath = "ulogs/S250_pixracer/2016-08-18/sess001/log3/"
+  endif
 else
   basePath = "";
 endif
@@ -156,7 +161,7 @@ sampInt = 1 / sampRate;
 global gfitrng;
 gfitrng = [0:sampInt:impLen]';
 
-TFopt = input("Estimate closed loop tilt(2), rate(1) or accel(0) response:");
+TFopt = input("Estimate closed loop tilt(2), rate(1) or accel(0) response: ");
 
 global grollStim;
 global gpitchStim;
@@ -190,7 +195,11 @@ stol = .0001;
 niter = 50;
 fit2rng = [1:length(rollSig)]';
 [f,pr,cvg,iter,corp,covpr]=leasqr(fit2rng,rollSig,pin,"hstarRollStim",stol,niter);
-if (cvg) disp("roll fit converged"); endif
+if (cvg) 
+  disp("roll fit converged"); 
+else
+  disp("roll fit diverged"); 
+endif
 
 fit2rng = [1:length(pitchSig)]';
 [f,pp,cvg,iter,corp,covpr]=leasqr(fit2rng,pitchSig,pin,"hstarPitchStim",stol,niter);
@@ -204,7 +213,11 @@ pitchZeta = pp(1) / pitchw0;
 
 rollImpFit = pr(3) * decaysin(gfitrng, pr);
 pitchImpFit = pp(3) * decaysin(gfitrng, pp);
-if (cvg) disp("pitch fit converged"); endif
+if (cvg) 
+  disp("pitch fit converged"); 
+else
+  disp("pitch fit diverged"); 
+endif
 
 # compute transfer functions
 Nfft = 2048;
@@ -234,7 +247,31 @@ disp(["test " label " Response"]);
 
 peakImp = max(rollImpFit);
 lagRollImp = find(rollImpFit==peakImp)
-modelRoll = fftfilt(rollImpFit, grollStim);
+rollModel = fftfilt(rollImpFit, grollStim);
+
+grollStimMean = mean(grollStim);
+Nlags = 100;
+[RrollModel, lag] = xcorr(rollModel-mean(rollModel), grollStim-grollStimMean, Nlags);
+RrollModel /= max(RrollModel);
+lagRoll = findPeakLag(RrollModel, lag)
+
+peakImp = max(pitchImpFit);
+lagPitchImp = find(pitchImpFit==peakImp)
+pitchModel = fftfilt(pitchImpFit, gpitchStim);
+
+gpitchStimMean = mean(gpitchStim);
+[RpitchModel, lag] = xcorr(pitchModel-mean(pitchModel), gpitchStim-gpitchStimMean, Nlags);
+RpitchModel /= max(RpitchModel);
+lagPitch = findPeakLag(RpitchModel, lag)
+
+dlyRoll = lagRollImp * sampInt;
+dlyPitch = lagPitchImp * sampInt;
+
+lagx = sampInt * lag;
+
+# more robust method of measuring response latency
+dlyRoll = findDelay(grollStim,rollModel,30) * sampInt;
+dlyPitch = findDelay(gpitchStim,pitchModel,30) * sampInt;
 
 #rewrap Euler angles
 if TFopt==2
@@ -242,28 +279,10 @@ if TFopt==2
   rollSig = wrapToPi(rollSig);
   gpitchStim = wrapToPi(gpitchStim);
   pitchSig = wrapToPi(pitchSig);
-  modelRoll = wrapToPi(modelRoll);
+  rollModel = wrapToPi(rollModel);
+  grollStimMean = mean(grollStim);
+  gpitchStimMean = mean(gpitchStim);
 endif
-
-grollStimMean = mean(grollStim);
-Nlags = 100;
-[RrollModel, lag] = xcorr(modelRoll-mean(modelRoll), grollStim-grollStimMean, Nlags);
-RrollModel /= max(RrollModel);
-lagRoll = findPeakLag(RrollModel, lag)
-
-peakImp = max(pitchImpFit);
-lagPitchImp = find(pitchImpFit==peakImp)
-modelPitch = fftfilt(pitchImpFit, gpitchStim);
-
-gpitchStimMean = mean(gpitchStim);
-[RpitchModel, lag] = xcorr(modelPitch-mean(modelPitch), gpitchStim-gpitchStimMean, Nlags);
-RpitchModel /= max(RpitchModel);
-lagPitch = findPeakLag(RpitchModel, lag)
-
-dlyRoll = lagRoll * sampInt;
-dlyPitch = lagPitch * sampInt;
-
-lagx = sampInt * lag;
 
 figPos = [200,350,512,512];
 figure(figNum++, "Position", figPos);
@@ -278,14 +297,14 @@ xlabel("seconds");
 axis("tight"); grid on;
 hgsave([basePath "/" fprefix "crossCorr.ofig"])
 
-disp(sprintf("max rollSig: %5.2f, max roll Stimulus: %5.2f, max modelRoll: %5.2f", max(rollSig), max(grollStim), max(modelRoll)));
+disp(sprintf("max rollSig: %5.2f, max roll Stimulus: %5.2f, max rollModel: %5.2f", max(rollSig), max(grollStim), max(rollModel)));
 
 varRoll = var(rollSig);
-varRollError = var(rollSig - modelRoll);
-varRollPred = var(modelRoll);
+varRollError = var(rollSig - rollModel);
+varRollPred = var(rollModel);
 varPitch = var(pitchSig);
-varPitchError = var(pitchSig - modelPitch);
-varPitchPred = var(modelPitch);
+varPitchError = var(pitchSig - pitchModel);
+varPitchPred = var(pitchModel);
 varFracRoll = 1 - varRollError/varRoll;
 varFracPitch = 1 - varPitchError/varPitch;
 
@@ -302,8 +321,8 @@ figPos = [200,300,1200,512];
 figure(figNum++, "Position", figPos);
 subplot(2,1,1);
 cScale = sum(rollImpFit)
-plot(g0tu, modelRoll*rad2deg, g0tu, rollSig*rad2deg, '.-', g0tu+dlyRoll, cScale * grollStim*rad2deg);
-legend("modelRoll", "roll", "delayed Control");
+plot(g0tu, rollModel*rad2deg, g0tu, rollSig*rad2deg, '.-', g0tu+dlyRoll, cScale * grollStim*rad2deg);
+legend("rollModel", "roll", "delayed Control");
 axis("tight")
 title(sprintf("%s Control, model and actual: roll delay=%4.3f, pitch delay=%4.3f, modeled variance roll %4.2f, pitch %4.2f", label, dlyRoll, dlyPitch, varFracRoll, varFracPitch));
 ylabel(yunits);
@@ -311,9 +330,9 @@ ylabel(yunits);
 
 subplot(2,1,2);
 cScale = sum(pitchImpFit)
-plot(g0tu, modelPitch*rad2deg, g0tu, pitchSig*rad2deg, '.-', g0tu+dlyPitch, cScale * gpitchStim*rad2deg);
+plot(g0tu, pitchModel*rad2deg, g0tu, pitchSig*rad2deg, '.-', g0tu+dlyPitch, cScale * gpitchStim*rad2deg);
 axis("tight")
-legend("modelpitch", "pitch", "delayed Control");
+legend("pitchModel", "pitch", "delayed Control");
 ylabel(yunits);
 grid on;
 %print([basePath "/" fprefix "tracking.png"], "-S1200,512")
@@ -326,7 +345,7 @@ figure(figNum++, "Position", figPos);
 subplot(3,1,1);
 imprng = [0:sampInt:impLen];
 ximp = [1:1+impLen/sampInt];
-plot(imprng, rollImpFit(ximp), "-b", imprng, pitchImpFit(ximp), "-r");
+plot(imprng, rollImpFit(ximp), "-b.", imprng, pitchImpFit(ximp), "-r.");
 tLine1 = [label " impulse response --- " sprintf("Roll control latency: %5.3f --- Pitch control latency: %5.3f\n", dlyRoll, dlyPitch)];
       
 tLine2 = sprintf(" roll damping: %4.2f, f0: %4.2f Hz, 90deg lag at %4.1f Hz  --- pitch damping: %4.2f, f0: %4.2f Hz, 90deg lag at %4.1f Hz\n",

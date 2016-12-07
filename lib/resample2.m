@@ -2,14 +2,14 @@ function [ut, uvec, sample_interval, jitter, drop_idx, drop_len] = resample2(sta
 
 # report dropouts
 dt = diff(time);
-sample_interval = median(dt)
+sample_interval = median(dt);
 if (sample_rate != 0)
-  sample_interval = 1 / sample_rate
+  sample_interval = 1 / sample_rate;
 endif
-jitter = std(dt)
+jitter = std(dt);
 drop_idx = find((dt-sample_interval) > (1.5*sample_interval));
-drop_times = time(drop_idx)
-drop_len = dt(drop_idx)
+drop_times = time(drop_idx);
+drop_len = dt(drop_idx);
 
 # resample to uniform rate in Hz
 ut = linspace(start_time, end_time, 1 + sample_rate * (end_time - start_time));
