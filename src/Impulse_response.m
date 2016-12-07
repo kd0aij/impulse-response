@@ -84,11 +84,11 @@ while (true)
   xlabel("seconds");
   grid("on"); grid("minor");
 
-  newStart = input("enter new startTime (0 if done): ");
-  if (newStart == 0) 
+  newStart = input("enter new startTime (return when done): ", "s");
+  if length(newStart) == 0
     break; 
   else
-    startTime = newStart;
+    startTime = str2num(newStart);
   endif;
   endTime = input("new endTime: ");
 
@@ -115,9 +115,13 @@ attspRange = [startOffset-1:endOffset+1];
 
 [q0tu, q0u] = resample2(startTime, endTime, q0t, q0, sampRate);
 [as0tu, att_sp0u] = resample2(startTime, endTime, as0t(attspRange), att_sp0(attspRange,:), sampRate);
+att_sp0u = unwrap(att_sp0u);
 
 # convert quaternion to Euler angles
 [roll0u, pitch0u, yaw0u] = quat2euler(q0u);
+roll0u = unwrap(roll0u);
+pitch0u = unwrap(pitch0u);
+yaw0u = unwrap(yaw0u);
 
 # take derivative of rates
 gyroDot0u = ddt(gyro0u);
@@ -178,7 +182,7 @@ endif
 
 # perform a least-squares fit to find the 3 parameters for the impulse response model
 # the model is h(t) = p3 exp(-p1 t) sin(p2 t)
-pin=[10, 26, .1];
+pin=[2, 15, .1];
 stol = .0001;
 niter = 50;
 fit2rng = [1:length(rollSig)]';
