@@ -1,5 +1,6 @@
 pkg load optim
 pkg load signal
+pkg load mapping
 addpath("../loaders:../lib");
 close all;
 clear all;
@@ -10,13 +11,13 @@ rad2deg = 180/pi;
 fflush (stdout);
 choice = input("load example dataset? (Y/n):", "s");
 if length(choice) == 0 || choice == 'Y' || choice == 'y'
-%  basePath = "/home/markw/gdrive/flightlogs/S250AQ/2016-12-05/log002/"
-%  startTime = 148;
-%  endTime = 160;
+  basePath = "/home/markw/gdrive/flightlogs/S250AQ/2016-12-05/log002/"
+  startTime = 148;
+  endTime = 160;
   #basePath = "/home/markw/gdrive/flightlogs/S250_pixracer/2016-08-18/sess001/log3/"
-  basePath = "/home/markw/Dropbox/Octave_sources/PX4/ulogs/AquaQuad/2016-09-17/"
-  startTime = 130;
-  endTime = 172;
+%  basePath = "/home/markw/Dropbox/Octave_sources/PX4/ulogs/AquaQuad/2016-09-17/"
+%  startTime = 130;
+%  endTime = 172;
 else
   basePath = "";
 endif
@@ -115,10 +116,12 @@ attspRange = [startOffset-1:endOffset+1];
 
 [q0tu, q0u] = resample2(startTime, endTime, q0t, q0, sampRate);
 [as0tu, att_sp0u] = resample2(startTime, endTime, as0t(attspRange), att_sp0(attspRange,:), sampRate);
-att_sp0u = unwrap(att_sp0u);
 
 # convert quaternion to Euler angles
 [roll0u, pitch0u, yaw0u] = quat2euler(q0u);
+
+# unwrap the Euler angles for analysis
+att_sp0u = unwrap(att_sp0u);
 roll0u = unwrap(roll0u);
 pitch0u = unwrap(pitch0u);
 yaw0u = unwrap(yaw0u);
@@ -233,6 +236,15 @@ peakImp = max(rollImpFit);
 lagRollImp = find(rollImpFit==peakImp)
 modelRoll = fftfilt(rollImpFit, grollStim);
 
+#rewrap Euler angles
+if TFopt==2
+  grollStim = wrapToPi(grollStim);
+  rollSig = wrapToPi(rollSig);
+  gpitchStim = wrapToPi(gpitchStim);
+  pitchSig = wrapToPi(pitchSig);
+  modelRoll = wrapToPi(modelRoll);
+endif
+
 grollStimMean = mean(grollStim);
 Nlags = 100;
 [RrollModel, lag] = xcorr(modelRoll-mean(modelRoll), grollStim-grollStimMean, Nlags);
@@ -278,6 +290,13 @@ varFracRoll = 1 - varRollError/varRoll;
 varFracPitch = 1 - varPitchError/varPitch;
 
 disp(sprintf("modeled variance:: roll: %5.2f, pitch: %5.2f", varFracRoll, varFracPitch));
+if TFopt == 2
+  yunits = "degrees";
+elseif TFopt ==1
+  yunits = "degrees/sec";
+else
+  yunits = "degress/sec/sec";
+endif
 
 figPos = [200,300,1200,512];
 figure(figNum++, "Position", figPos);
@@ -287,7 +306,7 @@ plot(g0tu, modelRoll*rad2deg, g0tu, rollSig*rad2deg, '.-', g0tu+dlyRoll, cScale 
 legend("modelRoll", "roll", "delayed Control");
 axis("tight")
 title(sprintf("%s Control, model and actual: roll delay=%4.3f, pitch delay=%4.3f, modeled variance roll %4.2f, pitch %4.2f", label, dlyRoll, dlyPitch, varFracRoll, varFracPitch));
-ylabel("degrees/sec");
+ylabel(yunits);
 
 
 subplot(2,1,2);
@@ -295,7 +314,7 @@ cScale = sum(pitchImpFit)
 plot(g0tu, modelPitch*rad2deg, g0tu, pitchSig*rad2deg, '.-', g0tu+dlyPitch, cScale * gpitchStim*rad2deg);
 axis("tight")
 legend("modelpitch", "pitch", "delayed Control");
-ylabel("degrees/sec");
+ylabel(yunits);
 grid on;
 %print([basePath "/" fprefix "tracking.png"], "-S1200,512")
 hgsave([basePath "/" fprefix "tracking.ofig"])
