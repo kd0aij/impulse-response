@@ -5,6 +5,8 @@ addpath("../loaders:../lib");
 close all;
 clear all;
 
+default_basePath = "/home/markw/gdrive/flightlogs";
+
 rad2deg = 180/pi;
 
 # path to CSV files
@@ -24,7 +26,7 @@ if length(choice) == 0 || choice == 'Y' || choice == 'y'
     basePath = "ulogs/S250_pixracer/2016-08-18/sess001/log3/"
   endif
 else
-  basePath = "";
+  basePath = default_basePath;
 endif
 
 # set default run parameters
@@ -35,7 +37,7 @@ rangeSelected = 0;
 # length in seconds of impulse response plot
 impLen = 1.5
 
-if strcmp(basePath, "")
+if strcmp(basePath, default_basePath)
   basePath = [uigetdir(basePath) "/"];
 endif
 
@@ -273,12 +275,12 @@ lagx = sampInt * lag;
 # more robust method of measuring response latency
 global gresponse = rollModel;
 global gstimulus = rollStim;
-global gmaxDelay = 2 * lagRollImp;
+global gmaxDelay = 4 * lagRollImp;
 dlyRoll = round(fminsearch("delaySSQ", [lagRollImp])) * sampInt
 
 global gresponse = pitchModel;
 global gstimulus = pitchStim;
-global gmaxDelay = 2 * lagPitchImp;
+global gmaxDelay = 4 * lagPitchImp;
 dlyPitch = round(fminsearch("delaySSQ", [lagPitchImp])) * sampInt
 
 #rewrap Euler angles
