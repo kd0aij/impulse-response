@@ -44,3 +44,14 @@ function [q_dot] = quat_dot(q, omega)
     
 
 endfunction
+
+function [out] = mult_quat(q,w)
+
+    a = q(1) * w(1) - q(2) * w(2) - q(3) * w(3) - q(4) * w(4);
+    b = q(1) * w(2) + q(2) * w(1) + q(3) * w(4) - q(4) * w(3);
+    c = q(1) * w(3) - q(2) * w(4) + q(3) * w(1) + q(4) * w(2);
+    d = q(1) * w(4) + q(2) * w(3) - q(3) * w(2) + q(4) * w(1);
+    
+    out = [a;b;c;d];
+
+endfunction

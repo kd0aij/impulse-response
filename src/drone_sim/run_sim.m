@@ -1,6 +1,7 @@
 # simulate a drone using pyhsical first pricinples
 clear all; close all;clc;
 source("rotation.m");
+source("attitude_controller.m")
 
 params.num_states = 17; # 3 pos, 3 vel, 4 quat, 3 omega, 4 omega_rot
 
@@ -47,8 +48,13 @@ params.I_p(3,3) = 1e-6;
 params.tau_rot = 0.1;   # motor time constant (from desired rpm to acual)
 params.mot.k_mot = 1e-3;  # motor constant, thrust = k_mot * rmp^2
 params.mot.k_t = 0.001;   # motor torque constant, torque = k_t * thrust
+params.mot.omega_max = 80;
 
 params.k_drag = 0.01;     # drag constant (linear relationship between body rate z and drag torque)
+
+# control parameters
+params.ctrl.att_p = [4;4;4];
+params.ctrl.rate_p = [0.005;0.005;0.005];
 
 # state vector
 state = zeros(params.num_states, 1);
@@ -57,9 +63,16 @@ state(params.mp.omg_rot(1)) = 45;
 state(params.mp.omg_rot(2)) = 45;
 state(params.mp.omg_rot(3)) = 45;
 state(params.mp.omg_rot(4)) = 45;
+state(params.mp.omg(1)) = 0.5;
+state(params.mp.omg(2)) = -0.5;
+state(params.mp.omg(3)) = 0.1;
+
 
 # input vector (desired motor rotational speeds) in rad/s
 input = ones(params.mot.num_motors,1).*50;
+
+# desired attitude quaternion
+q_sp = [cos(-0.2); sin(-0.2); 0;0];
 
 
 # simulation
@@ -72,6 +85,11 @@ index = 1;
 for i=0:0.01:sim_time
     STATE(:, index) = state;
     
+    # attitude conrol
+    rate_des = control_attitude(state(params.mp.q), q_sp, params);
+    control = control_rates(state(params.mp.omg), rate_des, params);
+    input = control_to_omega(control, params) + ones(4,1).*45;
+
     # most simple integration, in future use ode solver here
     state_new = state + eval_dynamics(state, input, params) * step_size;
     state_new(params.mp.q) = state_new(params.mp.q)./(norm(state_new(params.mp.q)));
@@ -83,4 +101,16 @@ end
 # generate plots
 sim_time = 0:step_size:sim_time;
 
-plot(sim_time, STATE(params.mp.v(1), :));
+plot(sim_time, STATE(params.mp.omg(1), :));
+xlabel("time in seconds");
+ylabel("body x rate in rad/s");
+
+figure();
+plot(sim_time, STATE(params.mp.omg(2), :));
+xlabel("time in seconds");
+ylabel("body y rate in rad/s");
+
+figure();
+plot(sim_time, STATE(params.mp.omg(3), :));
+xlabel("time in seconds");
+ylabel("body z rate in rad/s");
