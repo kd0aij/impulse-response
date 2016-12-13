@@ -1,7 +1,7 @@
 pkg load optim
 pkg load signal
 pkg load mapping
-addpath("../loaders:../lib");
+addpath("src/imp_resp/loaders:src/imp_resp/lib");
 close all;
 clear all;
 
@@ -15,11 +15,11 @@ choice = input("load example dataset? (Y/n):", "s");
 if length(choice) == 0 || choice == 'Y' || choice == 'y'
   choice = input("choose example [1,2]: ");
   if choice == 1
-    basePath = "../sample_ulogs/S250AQ/2016-12-05/log002/"
+    basePath = "sample_ulogs/S250AQ/2016-12-05/log002/"
     startTime = 148
     endTime = 160
   elseif choice == 2
-    basePath = "../sample_ulogs/AquaQuad/2016-09-17/"
+    basePath = "sample_ulogs/AquaQuad/2016-09-17/"
     startTime = 167
     endTime = 178
   else
