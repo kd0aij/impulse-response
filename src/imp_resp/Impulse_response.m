@@ -113,25 +113,34 @@ endwhile
 [s0tu, setpoint0u] = resample2(startTime, endTime, s0t, setpoint0, sampRate);
 [c0tu, control0u] = resample2(startTime, endTime, c0t, control0, sampRate);
 
-# avoid discontinuites in attitude_setpoint data by limiting range to selected segment
-startOffset = 1;
-while (as0t(startOffset) < startTime) startOffset++; endwhile
-endOffset = startOffset;
-while (as0t(endOffset) < endTime) endOffset++; endwhile
-# need an extra sample at each end of the segment for cubic Hermite interpolation
-attspRange = [startOffset-1:endOffset+1];
+# attitude setpoints aren't published in acro mode
+if (endTime < as0t(end))
+  # avoid discontinuites in attitude_setpoint data by limiting range to selected segment
+  startOffset = 1;
+  while (as0t(startOffset) < startTime) startOffset++; endwhile
+  endOffset = startOffset;
+  while (as0t(endOffset) < endTime) endOffset++; endwhile
+  # need an extra sample at each end of the segment for cubic Hermite interpolation
+  attspRange = [startOffset-1:endOffset+1];
 
-[q0tu, q0u] = resample2(startTime, endTime, q0t, q0, sampRate);
-[as0tu, att_sp0u] = resample2(startTime, endTime, as0t(attspRange), att_sp0(attspRange,:), sampRate);
+  [q0tu, q0u] = resample2(startTime, endTime, q0t, q0, sampRate);
+  [as0tu, att_sp0u] = resample2(startTime, endTime, as0t(attspRange), att_sp0(attspRange,:), sampRate);
 
-# convert quaternion to Euler angles
-[roll0u, pitch0u, yaw0u] = quat2euler(q0u);
+  # convert quaternion to Euler angles
+  [roll0u, pitch0u, yaw0u] = quat2euler(q0u);
 
-# unwrap the Euler angles for analysis
-att_sp0u = unwrap(att_sp0u);
-roll0u = unwrap(roll0u);
-pitch0u = unwrap(pitch0u);
-yaw0u = unwrap(yaw0u);
+  # unwrap the Euler angles for analysis
+  att_sp0u = unwrap(att_sp0u);
+  roll0u = unwrap(roll0u);
+  pitch0u = unwrap(pitch0u);
+  yaw0u = unwrap(yaw0u);
+
+  rollAttSP = att_sp0u(sigRange,1);
+  rollAngleSig = roll0u(sigRange);
+
+  pitchAttSP = att_sp0u(sigRange,2);
+  pitchAngleSig = pitch0u(sigRange);
+endif
 
 # take derivative of rates
 gyroDot0u = ddt(gyro0u);
@@ -143,15 +152,11 @@ rollRateSig = gyro0u(sigRange,1);
 rollAccelSig = gyroDot0u(sigRange,1);
 rollSetpoint = setpoint0u(sigRange,1);
 rollControl = control0u(sigRange,1);
-rollAttSP = att_sp0u(sigRange,1);
-rollAngleSig = roll0u(sigRange);
 
 pitchRateSig = gyro0u(sigRange,2);
 pitchAccelSig = gyroDot0u(sigRange,2);
 pitchSetpoint = setpoint0u(sigRange,2);
 pitchControl = control0u(sigRange,2);
-pitchAttSP = att_sp0u(sigRange,2);
-pitchAngleSig = pitch0u(sigRange);
 
 # sample interval in seconds
 sampInt = 1 / sampRate;
@@ -383,7 +388,7 @@ legend("roll", "pitch","location","southwest");
 legend("boxoff");
 xlabel("Hz");
 ylabel("dB");
-axis([0.1 20 -20 10]); grid on;
+axis([0.1 20 -20 20]); grid on;
 
 subplot(3,1,3);
 semilogx(fRange, unwrap(arg(TFrollSig(xRange)))*rad2deg, "-b", fRange, unwrap(arg(TFpitchSig(xRange)))*rad2deg, "-r",
