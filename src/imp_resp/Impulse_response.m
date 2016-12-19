@@ -123,8 +123,13 @@ if (endTime < as0t(end))
   # need an extra sample at each end of the segment for cubic Hermite interpolation
   attspRange = [startOffset-1:endOffset+1];
 
+
   [q0tu, q0u] = resample2(startTime, endTime, q0t, q0, sampRate);
-  [as0tu, att_sp0u] = resample2(startTime, endTime, as0t(attspRange), att_sp0(attspRange,:), sampRate);
+%  [as0tu, att_sp0u] = resample2(startTime, endTime, as0t(attspRange), att_sp0(attspRange,:), sampRate);
+  [as0tu, att_sp0u] = resample2(startTime, endTime, as0t, att_sp0, sampRate);
+
+  nsamples = size(q0u)(1);
+  sigRange = [1:nsamples];
 
   # convert quaternion to Euler angles
   [roll0u, pitch0u, yaw0u] = quat2euler(q0u);
