@@ -67,6 +67,7 @@ if (!exist('startTime') | !exist('endTime'))
   startTime = g0t(1)
   endTime = g0t(end)
   sigRange = [1:nsamples];
+  sigRangeSP = [1:size(as0t)(1)];
 else
   # find index span of gyro data
   startOffset = 1;
@@ -78,7 +79,7 @@ endif
 
 figNum = 1;
 figure(figNum++, "Position", [1,200,1200,320]);
-subplot(2,1,1);
+subplot(3,1,1);
 # ticks, rollRate, pitchRate
 plot(g0t, gyro0(:,1), "-b", g0t, gyro0(:,2), "-r");
 axis("tight"); title("raw roll and pitch rate data extents");
@@ -86,9 +87,15 @@ xlabel("seconds");
 grid("on"); grid("minor");
 
 while (true)
-  subplot(2,1,2);
+  subplot(3,1,2);
   plot(g0t(sigRange), gyro0(sigRange,1), "-b", g0t(sigRange), gyro0(sigRange,2), "-r");
   axis("tight"); title("raw roll and pitch rate data subset");
+  xlabel("seconds");
+  grid("on"); grid("minor");
+
+  subplot(3,1,3);
+  plot(as0t(sigRangeSP), att_sp0(sigRangeSP,1), "-b", as0t(sigRangeSP), att_sp0(sigRangeSP,2), "-r");
+  axis("tight"); title("roll and pitch setpoint data subset");
   xlabel("seconds");
   grid("on"); grid("minor");
 
@@ -106,6 +113,13 @@ while (true)
   endOffset = startOffset;
   while (g0t(endOffset) < endTime) endOffset++; endwhile
   sigRange = [startOffset:endOffset];
+
+  # find index span of att_sp0 data
+  startOffSP = 1;
+  while (as0t(startOffSP) < startTime) startOffSP++; endwhile
+  endOffSP = startOffSP;
+  while (as0t(endOffSP) < endTime) endOffSP++; endwhile
+  sigRangeSP = [startOffSP:endOffSP];
 endwhile
 
 # resample to uniform rate, over the time range [startTime, endTime]
@@ -125,8 +139,8 @@ if (endTime < as0t(end))
 
 
   [q0tu, q0u] = resample2(startTime, endTime, q0t, q0, sampRate);
-%  [as0tu, att_sp0u] = resample2(startTime, endTime, as0t(attspRange), att_sp0(attspRange,:), sampRate);
-  [as0tu, att_sp0u] = resample2(startTime, endTime, as0t, att_sp0, sampRate);
+  [as0tu, att_sp0u] = resample2(startTime, endTime, as0t(attspRange), att_sp0(attspRange,:), sampRate);
+%  [as0tu, att_sp0u] = resample2(startTime, endTime, as0t, att_sp0, sampRate);
 
   nsamples = size(q0u)(1);
   sigRange = [1:nsamples];
