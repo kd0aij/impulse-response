@@ -61,13 +61,13 @@ endfor
 [as0t, att_sp0] = loadAttSP_xyz(prefix, 0, basePath);
 
 nsamples = size(gyro0)(1);
+sigRange = [1:nsamples];
+sigRangeSP = [1:size(as0t)(1)];
 
 # find timespan of gyro data
 if (!exist('startTime') | !exist('endTime'))
   startTime = g0t(1)
   endTime = g0t(end)
-  sigRange = [1:nsamples];
-  sigRangeSP = [1:size(as0t)(1)];
 else
   # find index span of gyro data
   startOffset = 1;
@@ -78,7 +78,7 @@ else
 endif
 
 figNum = 1;
-figure(figNum++, "Position", [1,200,1200,320]);
+figure(figNum++, "Position", [1,200,1200,480]);
 subplot(3,1,1);
 # ticks, rollRate, pitchRate
 plot(g0t, gyro0(:,1), "-b", g0t, gyro0(:,2), "-r");
