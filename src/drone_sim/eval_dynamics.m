@@ -42,9 +42,17 @@ function [f] = eval_dynamics (state, input, params)
     thrust = quat2rot(quat) * thrust;
 
     # derivative of position is current velocity
-    pos_dot = vel;
+    if params.sim.p
+        pos_dot = vel;
+    else
+         pos_dot = [];
+    end
     
-    vel_dot = 1 / params.m .* (thrust + [0;0;params.g]);
+    if params.sim.v
+        vel_dot = 1 / params.m .* (thrust + [0;0;params.g]);
+    else
+        vel_dot = [];
+    end
 
     # in the referrenced paper the term omega_rot_tot corresponds to
     # sum(I_p * (omega_b + omega_mot(i)))
@@ -61,14 +69,26 @@ function [f] = eval_dynamics (state, input, params)
     end
     
     # calculate torque created by the propellers and the drag torque due to body z rate
-    moment = calc_motor_moment(omega_rot, params) + calc_drag_torque(omega, params);
-    omega_dot = inv(I) * (moment - cross(omega, I*omega + omega_rot_tot));
+    if params.sim.omg
+        moment = calc_motor_moment(omega_rot, params) + calc_drag_torque(omega, params);
+        omega_dot = inv(I) * (moment - cross(omega, I*omega + omega_rot_tot));
+    else
+        omega_dot = [];
+    end
     
     # motor rotational dynamics are modelled as first order system with time constant
-    omega_rot_dot = 1/tau_rot * (input - omega_rot);
+    if params.sim.omg_rot
+        omega_rot_dot = 1/tau_rot * (input - omega_rot);
+    else
+        omega_rot_dot = [];
+    end
 
     # quaternion derivative
-    quat_dot = quat_dot(quat, omega);
+    if params.sim.q
+      quat_dot = quat_dot(quat, omega);
+    else
+      quat_dot = [];
+    end
 
     # return time derivative of state vector
     f = [quat_dot;pos_dot;vel_dot;omega_dot;omega_rot_dot];
