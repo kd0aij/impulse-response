@@ -15,9 +15,9 @@ endfunction
 
 # compute control signal for the three body axes given
 # vehicle body rates and desired body rates
-function [out] = control_rates(rates, rates_des, params)
+function [out] = control_rates(rates, rates_des, rates_prev, dt, params)
 
-    out = params.ctrl.rate_p .* (rates_des - rates);
+    out = params.ctrl.rate_p .* (rates_des - rates) + params.ctrl.rate_d .* (rates - rates_prev) / dt;
 
 endfunction
 
