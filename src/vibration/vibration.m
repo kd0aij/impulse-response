@@ -54,16 +54,17 @@ endfor
 
 # load the measured rates, rate setpoints and rate controls (actuator input)
 [a0t, accel0] = loadAccel_xyz(prefix, 0, basePath);
+[af0t, accelf0] = loadAccel_filt(prefix, 0, basePath);
 
 nsamples = size(accel0)(1);
 sigRange = [1:nsamples];
 
-# find timespan of gyro data
+# find timespan of accel data
 if (!exist('startTime') | !exist('endTime'))
   startTime = a0t(1)
   endTime = a0t(end)
 else
-  # find index span of gyro data
+  # find index span of accel data
   startOffset = 1;
   while (a0t(startOffset) < startTime) startOffset++; endwhile
   endOffset = startOffset;
@@ -95,7 +96,7 @@ while (true)
   endif;
   endTime = input("new endTime: ");
 
-  # find index span of gyro data
+  # find index span of accel data
   startOffset = 1;
   while (a0t(startOffset) < startTime) startOffset++; endwhile
   endOffset = startOffset;
@@ -105,16 +106,28 @@ endwhile
 
 # resample to uniform rate, over the time range [startTime, endTime]
 [a0tu, accel0u] = resample2(startTime, endTime, a0t, accel0, sampRate);
+[af0tu, accelf0u] = resample2(startTime, endTime, af0t, accelf0, sampRate);
 
 # get FFT and calculate frequency span
 dataLen = size(accel0u)(1)
 fftLen = 2*ceil((dataLen-2)/2) + 1
 accel_fft = fft(accel0u);
+accelf_fft = fft(accelf0u);
 nyquist_freq = sampRate/2
 index_range = [2:ceil(fftLen/2)];
 freq_range = index_range * sampRate / fftLen;
 
 figure(figNum++, "Position", [1,300,1200,480]);
+plot(freq_range, abs(accelf_fft(index_range,1)), 'r',
+      freq_range, abs(accelf_fft(index_range,2)), 'g',
+      freq_range, abs(accelf_fft(index_range,3)), 'b');
+title("vibration spectrum: filtered");
+legend("x", "y", "z", "Location", "northwest");
+xlabel("Hz");
+axis("tight"); grid on;
+hgsave([basePath "/vibration_spectrum.ofig"])
+
+figure(figNum++, "Position", [1,400,1200,480]);
 plot(freq_range, abs(accel_fft(index_range,1)), 'r',
       freq_range, abs(accel_fft(index_range,2)), 'g',
       freq_range, abs(accel_fft(index_range,3)), 'b');
@@ -124,7 +137,7 @@ xlabel("Hz");
 axis("tight"); grid on;
 hgsave([basePath "/vibration_spectrum.ofig"])
 
-figure(figNum++, "Position", [1,300,1200,480]);
+figure(figNum++, "Position", [1,500,1200,480]);
 subplot(3,1,1);
 plot(freq_range, abs(accel_fft(index_range,1)), 'r');
 axis("tight"); grid on;
