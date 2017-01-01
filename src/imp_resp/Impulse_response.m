@@ -9,6 +9,17 @@ default_basePath = "/home/markw/gdrive/flightlogs";
 
 rad2deg = 180/pi;
 
+# set default run parameters
+# desired uniform sample rate in Hz; should be less than average sample rate
+rateOnly = true;
+sampRate = 400
+nplots = 2
+
+# set to true when start/endTime are correct
+rangeSelected = 0;
+# length in seconds of impulse response plot
+impLen = 1.5
+
 # path to CSV files
 fflush (stdout);
 choice = input("load example dataset? (Y/n):", "s");
@@ -29,14 +40,6 @@ else
   basePath = default_basePath;
 endif
 
-# set default run parameters
-# desired uniform sample rate in Hz; should be less than average sample rate
-sampRate = 100
-# set to true when start/endTime are correct
-rangeSelected = 0;
-# length in seconds of impulse response plot
-impLen = 1.5
-
 if strcmp(basePath, default_basePath)
   basePath = [uigetdir(basePath) "/"];
 endif
@@ -54,15 +57,28 @@ endfor
 # load the measured rates, rate setpoints and rate controls (actuator input)
 [g0t, gyro0] = loadSensor_xyz(prefix, 0, basePath);
 [s0t, setpoint0] = loadVrates_xyz(prefix, 0, basePath);
-[c0t, control0] = loadControlGroup0_xyz(prefix, 0, basePath);
 
-# load the attitude quaternions and attitude setpoints
-[q0t, q0] = loadAttitude_quat(prefix, 0, basePath);
-[as0t, att_sp0] = loadAttSP_xyz(prefix, 0, basePath);
+# check for optional actuator and attitude data
+filename = [basePath prefix "actuator_controls_0_0.csv"];
+printf ("input file: %s\n", filename);
+[info, err, msg] = stat (filename);
+if err != -1
+  rateOnly = false;
+  sampRate = 100
+  nplots = 3
+endif
+
+if not(rateOnly)
+  [c0t, control0] = loadControlGroup0_xyz(prefix, 0, basePath);
+
+  # load the attitude quaternions and attitude setpoints
+  [q0t, q0] = loadAttitude_quat(prefix, 0, basePath);
+  [as0t, att_sp0] = loadAttSP_xyz(prefix, 0, basePath);
+  sigRangeSP = [1:size(as0t)(1)];
+endif
 
 nsamples = size(gyro0)(1);
 sigRange = [1:nsamples];
-sigRangeSP = [1:size(as0t)(1)];
 
 # find timespan of gyro data
 if (!exist('startTime') | !exist('endTime'))
@@ -79,7 +95,7 @@ endif
 
 figNum = 1;
 figure(figNum++, "Position", [1,200,1200,480]);
-subplot(3,1,1);
+subplot(nplots,1,1);
 # ticks, rollRate, pitchRate
 plot(g0t, gyro0(:,1), "-b", g0t, gyro0(:,2), "-r");
 axis("tight"); title("raw roll and pitch rate data extents");
@@ -87,17 +103,19 @@ xlabel("seconds");
 grid("on"); grid("minor");
 
 while (true)
-  subplot(3,1,2);
+  subplot(nplots,1,2);
   plot(g0t(sigRange), gyro0(sigRange,1), "-b", g0t(sigRange), gyro0(sigRange,2), "-r");
   axis("tight"); title("raw roll and pitch rate data subset");
   xlabel("seconds");
   grid("on"); grid("minor");
 
-  subplot(3,1,3);
-  plot(as0t(sigRangeSP), att_sp0(sigRangeSP,1), "-b", as0t(sigRangeSP), att_sp0(sigRangeSP,2), "-r");
-  axis("tight"); title("roll and pitch setpoint data subset");
-  xlabel("seconds");
-  grid("on"); grid("minor");
+  if not(rateOnly)
+    subplot(nplots,1,3);
+    plot(as0t(sigRangeSP), att_sp0(sigRangeSP,1), "-b", as0t(sigRangeSP), att_sp0(sigRangeSP,2), "-r");
+    axis("tight"); title("roll and pitch setpoint data subset");
+    xlabel("seconds");
+    grid("on"); grid("minor");
+  endif
 
   newStart = input("enter new startTime (return when done): ", "s");
   if length(newStart) == 0
@@ -114,51 +132,56 @@ while (true)
   while (g0t(endOffset) < endTime) endOffset++; endwhile
   sigRange = [startOffset:endOffset];
 
-  # find index span of att_sp0 data
-  startOffSP = 1;
-  while (as0t(startOffSP) < startTime) startOffSP++; endwhile
-  endOffSP = startOffSP;
-  while (as0t(endOffSP) < endTime) endOffSP++; endwhile
-  sigRangeSP = [startOffSP:endOffSP];
+  if not(rateOnly)
+    # find index span of att_sp0 data
+    startOffSP = 1;
+    while (as0t(startOffSP) < startTime) startOffSP++; endwhile
+    endOffSP = startOffSP;
+    while (as0t(endOffSP) < endTime) endOffSP++; endwhile
+    sigRangeSP = [startOffSP:endOffSP];
+  endif
 endwhile
 
 # resample to uniform rate, over the time range [startTime, endTime]
 [g0tu, gyro0u] = resample2(startTime, endTime, g0t, gyro0, sampRate);
 [s0tu, setpoint0u] = resample2(startTime, endTime, s0t, setpoint0, sampRate);
-[c0tu, control0u] = resample2(startTime, endTime, c0t, control0, sampRate);
 
-# attitude setpoints aren't published in acro mode
-if (endTime < as0t(end))
-  # avoid discontinuites in attitude_setpoint data by limiting range to selected segment
-  startOffset = 1;
-  while (as0t(startOffset) < startTime) startOffset++; endwhile
-  endOffset = startOffset;
-  while (as0t(endOffset) < endTime) endOffset++; endwhile
-  # need an extra sample at each end of the segment for cubic Hermite interpolation
-  attspRange = [startOffset-1:endOffset+1];
+if not(rateOnly)
+  [c0tu, control0u] = resample2(startTime, endTime, c0t, control0, sampRate);
+
+  # attitude setpoints aren't published in acro mode
+  if (endTime < as0t(end))
+    # avoid discontinuites in attitude_setpoint data by limiting range to selected segment
+    startOffset = 1;
+    while (as0t(startOffset) < startTime) startOffset++; endwhile
+    endOffset = startOffset;
+    while (as0t(endOffset) < endTime) endOffset++; endwhile
+    # need an extra sample at each end of the segment for cubic Hermite interpolation
+    attspRange = [startOffset-1:endOffset+1];
 
 
-  [q0tu, q0u] = resample2(startTime, endTime, q0t, q0, sampRate);
-  [as0tu, att_sp0u] = resample2(startTime, endTime, as0t(attspRange), att_sp0(attspRange,:), sampRate);
-%  [as0tu, att_sp0u] = resample2(startTime, endTime, as0t, att_sp0, sampRate);
+    [q0tu, q0u] = resample2(startTime, endTime, q0t, q0, sampRate);
+    [as0tu, att_sp0u] = resample2(startTime, endTime, as0t(attspRange), att_sp0(attspRange,:), sampRate);
+  %  [as0tu, att_sp0u] = resample2(startTime, endTime, as0t, att_sp0, sampRate);
 
-  nsamples = size(q0u)(1);
-  sigRange = [1:nsamples];
+    nsamples = size(q0u)(1);
+    sigRange = [1:nsamples];
 
-  # convert quaternion to Euler angles
-  [roll0u, pitch0u, yaw0u] = quat2euler(q0u);
+    # convert quaternion to Euler angles
+    [roll0u, pitch0u, yaw0u] = quat2euler(q0u);
 
-  # unwrap the Euler angles for analysis
-  att_sp0u = unwrap(att_sp0u);
-  roll0u = unwrap(roll0u);
-  pitch0u = unwrap(pitch0u);
-  yaw0u = unwrap(yaw0u);
+    # unwrap the Euler angles for analysis
+    att_sp0u = unwrap(att_sp0u);
+    roll0u = unwrap(roll0u);
+    pitch0u = unwrap(pitch0u);
+    yaw0u = unwrap(yaw0u);
 
-  rollAttSP = att_sp0u(sigRange,1);
-  rollAngleSig = roll0u(sigRange);
+    rollAttSP = att_sp0u(sigRange,1);
+    rollAngleSig = roll0u(sigRange);
 
-  pitchAttSP = att_sp0u(sigRange,2);
-  pitchAngleSig = pitch0u(sigRange);
+    pitchAttSP = att_sp0u(sigRange,2);
+    pitchAngleSig = pitch0u(sigRange);
+  endif
 endif
 
 # take derivative of rates
@@ -170,12 +193,15 @@ sigRange = [1:nsamples];
 rollRateSig = gyro0u(sigRange,1);
 rollAccelSig = gyroDot0u(sigRange,1);
 rollSetpoint = setpoint0u(sigRange,1);
-rollControl = control0u(sigRange,1);
 
 pitchRateSig = gyro0u(sigRange,2);
 pitchAccelSig = gyroDot0u(sigRange,2);
 pitchSetpoint = setpoint0u(sigRange,2);
-pitchControl = control0u(sigRange,2);
+
+if not(rateOnly)
+  rollControl = control0u(sigRange,1);
+  pitchControl = control0u(sigRange,2);
+endif
 
 # sample interval in seconds
 sampInt = 1 / sampRate;
