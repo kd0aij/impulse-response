@@ -1,7 +1,9 @@
 pkg load optim
 pkg load signal
 pkg load mapping
-addpath("src/imp_resp/loaders:src/imp_resp/lib");
+
+# this script must be run from its location in the local repo
+addpath("./loaders:./lib");
 close all;
 clear all;
 
@@ -26,11 +28,11 @@ choice = input("load example dataset? (Y/n):", "s");
 if length(choice) == 0 || choice == 'Y' || choice == 'y'
   choice = input("choose example [1,2]: ");
   if choice == 1
-    basePath = "sample_ulogs/S250AQ/2016-12-05/log002/"
+    basePath = "../../sample_ulogs/S250AQ/2016-12-05/log002/"
     startTime = 148
     endTime = 160
   elseif choice == 2
-    basePath = "sample_ulogs/AquaQuad/2016-09-17/"
+    basePath = "../../sample_ulogs/AquaQuad/2016-09-17/"
     startTime = 167
     endTime = 178
   else
@@ -55,8 +57,8 @@ for i = [1:size(files)(1)]
 endfor
 
 # load the measured rates, rate setpoints and rate controls (actuator input)
-[g0t, gyro0] = loadSensor_xyz(prefix, 0, basePath);
-[s0t, setpoint0] = loadVrates_xyz(prefix, 0, basePath);
+[g0t, gyro0] = loadSensor_combined(prefix, 0, basePath);
+[s0t, setpoint0] = loadVratesSP(prefix, 0, basePath);
 
 # check for optional actuator and attitude data
 filename = [basePath prefix "actuator_controls_0_0.csv"];
@@ -69,11 +71,11 @@ if err != -1
 endif
 
 if not(rateOnly)
-  [c0t, control0] = loadControlGroup0_xyz(prefix, 0, basePath);
+  [c0t, control0] = loadControlGroup0(prefix, 0, basePath);
 
   # load the attitude quaternions and attitude setpoints
   [q0t, q0] = loadAttitude_quat(prefix, 0, basePath);
-  [as0t, att_sp0] = loadAttSP_xyz(prefix, 0, basePath);
+  [as0t, att_sp0] = loadAttSP(prefix, 0, basePath);
   sigRangeSP = [1:size(as0t)(1)];
 endif
 
