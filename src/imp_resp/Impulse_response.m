@@ -57,7 +57,7 @@ for i = [1:size(files)(1)]
 endfor
 
 # load the measured rates, rate setpoints and rate controls (actuator input)
-[g0t, gyro0] = loadSensor_combined(prefix, 0, basePath);
+[g0t, gyro0] = loadSC_gyro(prefix, 0, basePath);
 [s0t, setpoint0] = loadVratesSP(prefix, 0, basePath);
 
 # check for optional actuator and attitude data
