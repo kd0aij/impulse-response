@@ -12,11 +12,12 @@ drop_times = time(drop_idx);
 drop_len = dt(drop_idx);
 
 # resample to uniform rate in Hz
-ut = linspace(start_time, end_time, 1 + sample_rate * (end_time - start_time));
+ut = linspace(start_time, end_time, 1 + sample_rate * (end_time - start_time))';
 uvec = interp1(time, yvec, ut, 'pchip'); 
 
 if (doplot)
-  plot(time, yvec, '-bd', ut, uvec, 'ko');
+  figure;
+  plot(time, yvec, '-b.', ut, uvec, 'ro');
   legend("nonuniform", "resampled");
   xlabel("seconds");
   ylabel("rad/sec");
