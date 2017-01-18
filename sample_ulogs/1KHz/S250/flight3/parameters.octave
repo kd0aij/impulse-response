@@ -1,0 +1,1464 @@
+# name ATT_ACC_COMP
+# type: scalar
+1
+# name ATT_BIAS_MAX
+# type: scalar
+0.0500000007451
+# name ATT_EXT_HDG_M
+# type: scalar
+0
+# name ATT_MAG_DECL
+# type: scalar
+0.0
+# name ATT_MAG_DECL_A
+# type: scalar
+1
+# name ATT_VIBE_THRESH
+# type: scalar
+0.20000000298
+# name ATT_W_ACC
+# type: scalar
+0.20000000298
+# name ATT_W_EXT_HDG
+# type: scalar
+0.10000000149
+# name ATT_W_GYRO_BIAS
+# type: scalar
+0.10000000149
+# name ATT_W_MAG
+# type: scalar
+0.0
+# name BAT_A_PER_V
+# type: scalar
+36.367515564
+# name BAT_CAPACITY
+# type: scalar
+-1.0
+# name BAT_CNT_V_CURR
+# type: scalar
+0.000805664050858
+# name BAT_CNT_V_VOLT
+# type: scalar
+0.000805664050858
+# name BAT_CRIT_THR
+# type: scalar
+0.070000000298
+# name BAT_LOW_THR
+# type: scalar
+0.15000000596
+# name BAT_N_CELLS
+# type: scalar
+3
+# name BAT_R_INTERNAL
+# type: scalar
+-1.0
+# name BAT_SOURCE
+# type: scalar
+0
+# name BAT_V_CHARGED
+# type: scalar
+4.19999980927
+# name BAT_V_DIV
+# type: scalar
+13.6533336639
+# name BAT_V_EMPTY
+# type: scalar
+3.40000009537
+# name BAT_V_LOAD_DROP
+# type: scalar
+0.070000000298
+# name BAT_V_OFFS_CURR
+# type: scalar
+0.0
+# name CAL_ACC0_ID
+# type: scalar
+1246730
+# name CAL_ACC0_XOFF
+# type: scalar
+0.000997066497803
+# name CAL_ACC0_XSCALE
+# type: scalar
+0.998362362385
+# name CAL_ACC0_YOFF
+# type: scalar
+-0.696006298065
+# name CAL_ACC0_YSCALE
+# type: scalar
+0.976355195045
+# name CAL_ACC0_ZOFF
+# type: scalar
+-0.58532333374
+# name CAL_ACC0_ZSCALE
+# type: scalar
+0.998044371605
+# name CAL_ACC1_ID
+# type: scalar
+1442824
+# name CAL_ACC1_XOFF
+# type: scalar
+0.104248523712
+# name CAL_ACC1_XSCALE
+# type: scalar
+0.997842907906
+# name CAL_ACC1_YOFF
+# type: scalar
+0.0257339477539
+# name CAL_ACC1_YSCALE
+# type: scalar
+1.00613677502
+# name CAL_ACC1_ZOFF
+# type: scalar
+0.225954532623
+# name CAL_ACC1_ZSCALE
+# type: scalar
+0.997390389442
+# name CAL_ACC2_XOFF
+# type: scalar
+0.0
+# name CAL_ACC2_XSCALE
+# type: scalar
+1.0
+# name CAL_ACC2_YOFF
+# type: scalar
+0.0
+# name CAL_ACC2_YSCALE
+# type: scalar
+1.0
+# name CAL_ACC2_ZOFF
+# type: scalar
+0.0
+# name CAL_ACC2_ZSCALE
+# type: scalar
+1.0
+# name CAL_ACC_PRIME
+# type: scalar
+1246730
+# name CAL_BARO_PRIME
+# type: scalar
+0
+# name CAL_GYRO0_ID
+# type: scalar
+2162688
+# name CAL_GYRO0_XOFF
+# type: scalar
+-0.0567085929215
+# name CAL_GYRO0_XSCALE
+# type: scalar
+1.0
+# name CAL_GYRO0_YOFF
+# type: scalar
+-0.00388909876347
+# name CAL_GYRO0_YSCALE
+# type: scalar
+1.0
+# name CAL_GYRO0_ZOFF
+# type: scalar
+-0.00973624736071
+# name CAL_GYRO0_ZSCALE
+# type: scalar
+1.0
+# name CAL_GYRO1_ID
+# type: scalar
+2360328
+# name CAL_GYRO1_XOFF
+# type: scalar
+-0.00761587126181
+# name CAL_GYRO1_XSCALE
+# type: scalar
+1.0
+# name CAL_GYRO1_YOFF
+# type: scalar
+0.0105190426111
+# name CAL_GYRO1_YSCALE
+# type: scalar
+1.0
+# name CAL_GYRO1_ZOFF
+# type: scalar
+-0.00705790147185
+# name CAL_GYRO1_ZSCALE
+# type: scalar
+1.0
+# name CAL_GYRO2_XOFF
+# type: scalar
+0.0
+# name CAL_GYRO2_XSCALE
+# type: scalar
+1.0
+# name CAL_GYRO2_YOFF
+# type: scalar
+0.0
+# name CAL_GYRO2_YSCALE
+# type: scalar
+1.0
+# name CAL_GYRO2_ZOFF
+# type: scalar
+0.0
+# name CAL_GYRO2_ZSCALE
+# type: scalar
+1.0
+# name CAL_GYRO_PRIME
+# type: scalar
+2162688
+# name CAL_MAG0_ID
+# type: scalar
+66826
+# name CAL_MAG0_ROT
+# type: scalar
+-1
+# name CAL_MAG0_XOFF
+# type: scalar
+0.150528550148
+# name CAL_MAG0_XSCALE
+# type: scalar
+1.05909729004
+# name CAL_MAG0_YOFF
+# type: scalar
+-0.1204951033
+# name CAL_MAG0_YSCALE
+# type: scalar
+1.12063956261
+# name CAL_MAG0_ZOFF
+# type: scalar
+-0.190372660756
+# name CAL_MAG0_ZSCALE
+# type: scalar
+1.17508125305
+# name CAL_MAG1_ID
+# type: scalar
+263176
+# name CAL_MAG1_ROT
+# type: scalar
+-1
+# name CAL_MAG1_XOFF
+# type: scalar
+0.0254759304225
+# name CAL_MAG1_XSCALE
+# type: scalar
+1.0
+# name CAL_MAG1_YOFF
+# type: scalar
+0.513992190361
+# name CAL_MAG1_YSCALE
+# type: scalar
+1.0
+# name CAL_MAG1_ZOFF
+# type: scalar
+0.0661922246218
+# name CAL_MAG1_ZSCALE
+# type: scalar
+1.0
+# name CAL_MAG2_ID
+# type: scalar
+0
+# name CAL_MAG2_ROT
+# type: scalar
+-1
+# name CAL_MAG2_XOFF
+# type: scalar
+0.147986233234
+# name CAL_MAG2_XSCALE
+# type: scalar
+1.0
+# name CAL_MAG2_YOFF
+# type: scalar
+0.385440200567
+# name CAL_MAG2_YSCALE
+# type: scalar
+1.0
+# name CAL_MAG2_ZOFF
+# type: scalar
+0.527754485607
+# name CAL_MAG2_ZSCALE
+# type: scalar
+1.0
+# name CAL_MAG_PRIME
+# type: scalar
+66826
+# name CAL_MAG_SIDES
+# type: scalar
+63
+# name CBRK_AIRSPD_CHK
+# type: scalar
+0
+# name CBRK_ENGINEFAIL
+# type: scalar
+284953
+# name CBRK_FLIGHTTERM
+# type: scalar
+0
+# name CBRK_GPSFAIL
+# type: scalar
+240024
+# name CBRK_IO_SAFETY
+# type: scalar
+0
+# name CBRK_RATE_CTRL
+# type: scalar
+0
+# name CBRK_SUPPLY_CHK
+# type: scalar
+894281
+# name CBRK_USB_CHK
+# type: scalar
+197848
+# name COM_ARM_EKF_AB
+# type: scalar
+0.00499999988824
+# name COM_ARM_EKF_GB
+# type: scalar
+0.000869999988936
+# name COM_ARM_EKF_HGT
+# type: scalar
+1.0
+# name COM_ARM_EKF_POS
+# type: scalar
+0.5
+# name COM_ARM_EKF_VEL
+# type: scalar
+0.5
+# name COM_ARM_EKF_YAW
+# type: scalar
+0.5
+# name COM_ARM_IMU_ACC
+# type: scalar
+0.699999988079
+# name COM_ARM_IMU_GYR
+# type: scalar
+0.15000000596
+# name COM_ARM_SWISBTN
+# type: scalar
+0
+# name COM_ARM_WO_GPS
+# type: scalar
+1
+# name COM_AUTOS_PAR
+# type: scalar
+1
+# name COM_DISARM_LAND
+# type: scalar
+0
+# name COM_DL_LOSS_T
+# type: scalar
+10
+# name COM_DL_REG_T
+# type: scalar
+0
+# name COM_EF_C2T
+# type: scalar
+5.0
+# name COM_EF_THROT
+# type: scalar
+0.5
+# name COM_EF_TIME
+# type: scalar
+10.0
+# name COM_FLTMODE1
+# type: scalar
+-1
+# name COM_FLTMODE2
+# type: scalar
+-1
+# name COM_FLTMODE3
+# type: scalar
+-1
+# name COM_FLTMODE4
+# type: scalar
+-1
+# name COM_FLTMODE5
+# type: scalar
+-1
+# name COM_FLTMODE6
+# type: scalar
+-1
+# name COM_HOME_H_T
+# type: scalar
+5.0
+# name COM_HOME_V_T
+# type: scalar
+10.0
+# name COM_LOW_BAT_ACT
+# type: scalar
+0
+# name COM_OBL_ACT
+# type: scalar
+0
+# name COM_OBL_RC_ACT
+# type: scalar
+0
+# name COM_OF_LOSS_T
+# type: scalar
+0.0
+# name COM_RC_ARM_HYST
+# type: scalar
+1000
+# name COM_RC_IN_MODE
+# type: scalar
+0
+# name COM_RC_LOSS_T
+# type: scalar
+0.5
+# name FW_AIRSPD_TRIM
+# type: scalar
+15.0
+# name FW_ARSP_MODE
+# type: scalar
+0
+# name FW_CLMBOUT_DIFF
+# type: scalar
+10.0
+# name FW_THR_CRUISE
+# type: scalar
+0.600000023842
+# name GF_ACTION
+# type: scalar
+1
+# name GF_ALTMODE
+# type: scalar
+0
+# name GF_COUNT
+# type: scalar
+-1
+# name GF_MAX_HOR_DIST
+# type: scalar
+0.0
+# name GF_MAX_VER_DIST
+# type: scalar
+0.0
+# name GF_SOURCE
+# type: scalar
+0
+# name GPS_DUMP_COMM
+# type: scalar
+0
+# name LNDMC_FFALL_THR
+# type: scalar
+2.0
+# name LNDMC_FFALL_TTRI
+# type: scalar
+0.300000011921
+# name LNDMC_ROT_MAX
+# type: scalar
+20.0
+# name LNDMC_XY_VEL_MAX
+# type: scalar
+1.5
+# name LNDMC_Z_VEL_MAX
+# type: scalar
+0.699999988079
+# name LPE_ACC_XY
+# type: scalar
+0.0120000001043
+# name LPE_ACC_Z
+# type: scalar
+2.0
+# name LPE_BAR_Z
+# type: scalar
+3.0
+# name LPE_EPH_MAX
+# type: scalar
+3.0
+# name LPE_EPV_MAX
+# type: scalar
+5.0
+# name LPE_FGYRO_HP
+# type: scalar
+0.0010000000475
+# name LPE_FLW_OFF_Z
+# type: scalar
+0.0
+# name LPE_FLW_QMIN
+# type: scalar
+150
+# name LPE_FLW_R
+# type: scalar
+7.0
+# name LPE_FLW_RR
+# type: scalar
+7.0
+# name LPE_FLW_SCALE
+# type: scalar
+1.29999995232
+# name LPE_FUSION
+# type: scalar
+247
+# name LPE_GPS_DELAY
+# type: scalar
+0.289999991655
+# name LPE_GPS_VXY
+# type: scalar
+0.25
+# name LPE_GPS_VZ
+# type: scalar
+0.25
+# name LPE_GPS_XY
+# type: scalar
+1.0
+# name LPE_GPS_Z
+# type: scalar
+3.0
+# name LPE_LAND_VXY
+# type: scalar
+0.0500000007451
+# name LPE_LAND_Z
+# type: scalar
+0.0299999993294
+# name LPE_LAT
+# type: scalar
+47.3977432251
+# name LPE_LDR_OFF_Z
+# type: scalar
+0.0
+# name LPE_LDR_Z
+# type: scalar
+0.0299999993294
+# name LPE_LON
+# type: scalar
+8.54559421539
+# name LPE_PN_B
+# type: scalar
+0.0010000000475
+# name LPE_PN_P
+# type: scalar
+0.10000000149
+# name LPE_PN_T
+# type: scalar
+0.0010000000475
+# name LPE_PN_V
+# type: scalar
+0.10000000149
+# name LPE_SNR_OFF_Z
+# type: scalar
+0.0
+# name LPE_SNR_Z
+# type: scalar
+0.0500000007451
+# name LPE_T_MAX_GRADE
+# type: scalar
+1.0
+# name LPE_VIC_P
+# type: scalar
+0.0010000000475
+# name LPE_VIS_DELAY
+# type: scalar
+0.10000000149
+# name LPE_VIS_XY
+# type: scalar
+0.10000000149
+# name LPE_VIS_Z
+# type: scalar
+0.5
+# name LPE_VXY_PUB
+# type: scalar
+0.300000011921
+# name LPE_X_LP
+# type: scalar
+5.0
+# name LPE_Z_PUB
+# type: scalar
+1.0
+# name MAV_BROADCAST
+# type: scalar
+0
+# name MAV_COMP_ID
+# type: scalar
+1
+# name MAV_FWDEXTSP
+# type: scalar
+1
+# name MAV_PROTO_VER
+# type: scalar
+0
+# name MAV_RADIO_ID
+# type: scalar
+0
+# name MAV_SYS_ID
+# type: scalar
+1
+# name MAV_TEST_PAR
+# type: scalar
+1
+# name MAV_TYPE
+# type: scalar
+2
+# name MAV_USEHILGPS
+# type: scalar
+0
+# name MC_ACRO_P_MAX
+# type: scalar
+360.0
+# name MC_ACRO_R_MAX
+# type: scalar
+360.0
+# name MC_ACRO_Y_MAX
+# type: scalar
+360.0
+# name MC_BAT_SCALE_EN
+# type: scalar
+0
+# name MC_PITCHRATE_D
+# type: scalar
+0.0054999999702
+# name MC_PITCHRATE_FF
+# type: scalar
+0.0
+# name MC_PITCHRATE_I
+# type: scalar
+0.10000000149
+# name MC_PITCHRATE_MAX
+# type: scalar
+360.0
+# name MC_PITCHRATE_P
+# type: scalar
+0.189999997616
+# name MC_PITCH_P
+# type: scalar
+8.0
+# name MC_PITCH_TC
+# type: scalar
+0.20000000298
+# name MC_PR_INT_LIM
+# type: scalar
+0.300000011921
+# name MC_RATT_TH
+# type: scalar
+1.0
+# name MC_ROLLRATE_D
+# type: scalar
+0.0054999999702
+# name MC_ROLLRATE_FF
+# type: scalar
+0.0
+# name MC_ROLLRATE_I
+# type: scalar
+0.10000000149
+# name MC_ROLLRATE_MAX
+# type: scalar
+360.0
+# name MC_ROLLRATE_P
+# type: scalar
+0.189999997616
+# name MC_ROLL_P
+# type: scalar
+8.0
+# name MC_ROLL_TC
+# type: scalar
+0.20000000298
+# name MC_RR_INT_LIM
+# type: scalar
+0.300000011921
+# name MC_TPA_BREAK_D
+# type: scalar
+0.300000011921
+# name MC_TPA_BREAK_I
+# type: scalar
+1.0
+# name MC_TPA_BREAK_P
+# type: scalar
+0.300000011921
+# name MC_TPA_RATE_D
+# type: scalar
+1.0
+# name MC_TPA_RATE_I
+# type: scalar
+0.0
+# name MC_TPA_RATE_P
+# type: scalar
+1.0
+# name MC_YAWRATE_D
+# type: scalar
+0.0
+# name MC_YAWRATE_FF
+# type: scalar
+0.0
+# name MC_YAWRATE_I
+# type: scalar
+0.10000000149
+# name MC_YAWRATE_MAX
+# type: scalar
+360.0
+# name MC_YAWRATE_P
+# type: scalar
+0.20000000298
+# name MC_YAWRAUTO_MAX
+# type: scalar
+45.0
+# name MC_YAW_FF
+# type: scalar
+0.5
+# name MC_YAW_P
+# type: scalar
+4.0
+# name MC_YR_INT_LIM
+# type: scalar
+0.300000011921
+# name MIS_ALTMODE
+# type: scalar
+1
+# name MIS_DIST_1WP
+# type: scalar
+900.0
+# name MIS_LTRMIN_ALT
+# type: scalar
+1.20000004768
+# name MIS_ONBOARD_EN
+# type: scalar
+1
+# name MIS_TAKEOFF_ALT
+# type: scalar
+2.5
+# name MIS_YAWMODE
+# type: scalar
+1
+# name MIS_YAW_ERR
+# type: scalar
+12.0
+# name MIS_YAW_TMT
+# type: scalar
+-1.0
+# name MOT_SLEW_MAX
+# type: scalar
+0.0
+# name MPC_ACC_HOR_MAX
+# type: scalar
+4.0
+# name MPC_ALTCTL_DY
+# type: scalar
+0.0250000003725
+# name MPC_ALTCTL_DZ
+# type: scalar
+0.10000000149
+# name MPC_ALT_MODE
+# type: scalar
+0
+# name MPC_HOLD_MAX_XY
+# type: scalar
+0.5
+# name MPC_HOLD_MAX_Z
+# type: scalar
+0.5
+# name MPC_HOLD_XY_DZ
+# type: scalar
+0.10000000149
+# name MPC_LAND_SPEED
+# type: scalar
+0.5
+# name MPC_MANTHR_MAX
+# type: scalar
+0.899999976158
+# name MPC_MANTHR_MIN
+# type: scalar
+0.0599999986589
+# name MPC_MAN_P_MAX
+# type: scalar
+35.0
+# name MPC_MAN_R_MAX
+# type: scalar
+35.0
+# name MPC_MAN_Y_MAX
+# type: scalar
+120.0
+# name MPC_THR_HOVER
+# type: scalar
+0.34999999404
+# name MPC_THR_MAX
+# type: scalar
+0.899999976158
+# name MPC_THR_MIN
+# type: scalar
+0.0599999986589
+# name MPC_TILTMAX_AIR
+# type: scalar
+45.0
+# name MPC_TILTMAX_LND
+# type: scalar
+12.0
+# name MPC_TKO_SPEED
+# type: scalar
+1.5
+# name MPC_VELD_LP
+# type: scalar
+5.0
+# name MPC_XY_CRUISE
+# type: scalar
+5.0
+# name MPC_XY_FF
+# type: scalar
+0.5
+# name MPC_XY_P
+# type: scalar
+1.0
+# name MPC_XY_VEL_D
+# type: scalar
+0.00999999977648
+# name MPC_XY_VEL_I
+# type: scalar
+0.019999999553
+# name MPC_XY_VEL_MAX
+# type: scalar
+5.0
+# name MPC_XY_VEL_P
+# type: scalar
+0.10000000149
+# name MPC_Z_FF
+# type: scalar
+0.5
+# name MPC_Z_P
+# type: scalar
+1.0
+# name MPC_Z_VEL_D
+# type: scalar
+0.0
+# name MPC_Z_VEL_I
+# type: scalar
+0.019999999553
+# name MPC_Z_VEL_MAX
+# type: scalar
+3.0
+# name MPC_Z_VEL_MAX_DN
+# type: scalar
+3.0
+# name MPC_Z_VEL_MAX_UP
+# type: scalar
+3.0
+# name MPC_Z_VEL_P
+# type: scalar
+0.20000000298
+# name NAV_ACC_RAD
+# type: scalar
+2.0
+# name NAV_AH_ALT
+# type: scalar
+600.0
+# name NAV_AH_LAT
+# type: scalar
+-265847810
+# name NAV_AH_LON
+# type: scalar
+1518423250
+# name NAV_DLL_ACT
+# type: scalar
+3
+# name NAV_DLL_AH_T
+# type: scalar
+120.0
+# name NAV_DLL_CHSK
+# type: scalar
+0
+# name NAV_DLL_CH_ALT
+# type: scalar
+600.0
+# name NAV_DLL_CH_LAT
+# type: scalar
+-266072120
+# name NAV_DLL_CH_LON
+# type: scalar
+1518453890
+# name NAV_DLL_CH_T
+# type: scalar
+120.0
+# name NAV_DLL_N
+# type: scalar
+2
+# name NAV_FORCE_VT
+# type: scalar
+1
+# name NAV_FT_DST
+# type: scalar
+8.0
+# name NAV_FT_FS
+# type: scalar
+1
+# name NAV_FT_RS
+# type: scalar
+0.5
+# name NAV_FW_ALT_RAD
+# type: scalar
+10.0
+# name NAV_GPSF_LT
+# type: scalar
+30.0
+# name NAV_GPSF_P
+# type: scalar
+0.0
+# name NAV_GPSF_R
+# type: scalar
+15.0
+# name NAV_GPSF_TR
+# type: scalar
+0.699999988079
+# name NAV_LOITER_RAD
+# type: scalar
+50.0
+# name NAV_MC_ALT_RAD
+# type: scalar
+3.0
+# name NAV_MIN_FT_HT
+# type: scalar
+8.0
+# name NAV_RCL_ACT
+# type: scalar
+2
+# name NAV_RCL_LT
+# type: scalar
+120.0
+# name PWM_AUX_DISARMED
+# type: scalar
+1500
+# name PWM_AUX_MAX
+# type: scalar
+2000
+# name PWM_AUX_MIN
+# type: scalar
+1000
+# name PWM_AUX_REV1
+# type: scalar
+0
+# name PWM_AUX_REV2
+# type: scalar
+0
+# name PWM_AUX_REV3
+# type: scalar
+0
+# name PWM_AUX_REV4
+# type: scalar
+0
+# name PWM_AUX_REV5
+# type: scalar
+0
+# name PWM_AUX_REV6
+# type: scalar
+0
+# name PWM_AUX_TRIM1
+# type: scalar
+0.0
+# name PWM_AUX_TRIM2
+# type: scalar
+0.0
+# name PWM_AUX_TRIM3
+# type: scalar
+0.0
+# name PWM_AUX_TRIM4
+# type: scalar
+0.0
+# name PWM_AUX_TRIM5
+# type: scalar
+0.0
+# name PWM_AUX_TRIM6
+# type: scalar
+0.0
+# name PWM_DISARMED
+# type: scalar
+900
+# name PWM_MAX
+# type: scalar
+1950
+# name PWM_MIN
+# type: scalar
+1075
+# name PWM_RATE
+# type: scalar
+400
+# name RC10_DZ
+# type: scalar
+0.0
+# name RC10_MAX
+# type: scalar
+2000.0
+# name RC10_MIN
+# type: scalar
+1000.0
+# name RC10_REV
+# type: scalar
+1.0
+# name RC10_TRIM
+# type: scalar
+1500.0
+# name RC11_DZ
+# type: scalar
+0.0
+# name RC11_MAX
+# type: scalar
+2000.0
+# name RC11_MIN
+# type: scalar
+1000.0
+# name RC11_REV
+# type: scalar
+1.0
+# name RC11_TRIM
+# type: scalar
+1500.0
+# name RC12_DZ
+# type: scalar
+0.0
+# name RC12_MAX
+# type: scalar
+2000.0
+# name RC12_MIN
+# type: scalar
+1000.0
+# name RC12_REV
+# type: scalar
+1.0
+# name RC12_TRIM
+# type: scalar
+1500.0
+# name RC13_DZ
+# type: scalar
+0.0
+# name RC13_MAX
+# type: scalar
+2000.0
+# name RC13_MIN
+# type: scalar
+1000.0
+# name RC13_REV
+# type: scalar
+1.0
+# name RC13_TRIM
+# type: scalar
+1500.0
+# name RC14_DZ
+# type: scalar
+0.0
+# name RC14_MAX
+# type: scalar
+2000.0
+# name RC14_MIN
+# type: scalar
+1000.0
+# name RC14_REV
+# type: scalar
+1.0
+# name RC14_TRIM
+# type: scalar
+1500.0
+# name RC15_DZ
+# type: scalar
+0.0
+# name RC15_MAX
+# type: scalar
+2000.0
+# name RC15_MIN
+# type: scalar
+1000.0
+# name RC15_REV
+# type: scalar
+1.0
+# name RC15_TRIM
+# type: scalar
+1500.0
+# name RC16_DZ
+# type: scalar
+0.0
+# name RC16_MAX
+# type: scalar
+2000.0
+# name RC16_MIN
+# type: scalar
+1000.0
+# name RC16_REV
+# type: scalar
+1.0
+# name RC16_TRIM
+# type: scalar
+1500.0
+# name RC17_DZ
+# type: scalar
+0.0
+# name RC17_MAX
+# type: scalar
+2000.0
+# name RC17_MIN
+# type: scalar
+1000.0
+# name RC17_REV
+# type: scalar
+1.0
+# name RC17_TRIM
+# type: scalar
+1500.0
+# name RC18_DZ
+# type: scalar
+0.0
+# name RC18_MAX
+# type: scalar
+2000.0
+# name RC18_MIN
+# type: scalar
+1000.0
+# name RC18_REV
+# type: scalar
+1.0
+# name RC18_TRIM
+# type: scalar
+1500.0
+# name RC1_DZ
+# type: scalar
+10.0
+# name RC1_MAX
+# type: scalar
+2006.0
+# name RC1_MIN
+# type: scalar
+982.0
+# name RC1_REV
+# type: scalar
+1.0
+# name RC1_TRIM
+# type: scalar
+1494.0
+# name RC2_DZ
+# type: scalar
+10.0
+# name RC2_MAX
+# type: scalar
+2006.0
+# name RC2_MIN
+# type: scalar
+982.0
+# name RC2_REV
+# type: scalar
+1.0
+# name RC2_TRIM
+# type: scalar
+1493.0
+# name RC3_DZ
+# type: scalar
+10.0
+# name RC3_MAX
+# type: scalar
+2006.0
+# name RC3_MIN
+# type: scalar
+994.0
+# name RC3_REV
+# type: scalar
+1.0
+# name RC3_TRIM
+# type: scalar
+994.0
+# name RC4_DZ
+# type: scalar
+10.0
+# name RC4_MAX
+# type: scalar
+2006.0
+# name RC4_MIN
+# type: scalar
+982.0
+# name RC4_REV
+# type: scalar
+1.0
+# name RC4_TRIM
+# type: scalar
+1496.0
+# name RC5_DZ
+# type: scalar
+10.0
+# name RC5_MAX
+# type: scalar
+2000.0
+# name RC5_MIN
+# type: scalar
+1000.0
+# name RC5_REV
+# type: scalar
+1.0
+# name RC5_TRIM
+# type: scalar
+1500.0
+# name RC6_DZ
+# type: scalar
+10.0
+# name RC6_MAX
+# type: scalar
+2000.0
+# name RC6_MIN
+# type: scalar
+1000.0
+# name RC6_REV
+# type: scalar
+1.0
+# name RC6_TRIM
+# type: scalar
+1500.0
+# name RC7_DZ
+# type: scalar
+10.0
+# name RC7_MAX
+# type: scalar
+2006.0
+# name RC7_MIN
+# type: scalar
+982.0
+# name RC7_REV
+# type: scalar
+1.0
+# name RC7_TRIM
+# type: scalar
+1494.0
+# name RC8_DZ
+# type: scalar
+10.0
+# name RC8_MAX
+# type: scalar
+2006.0
+# name RC8_MIN
+# type: scalar
+982.0
+# name RC8_REV
+# type: scalar
+1.0
+# name RC8_TRIM
+# type: scalar
+1494.0
+# name RC9_DZ
+# type: scalar
+0.0
+# name RC9_MAX
+# type: scalar
+2000.0
+# name RC9_MIN
+# type: scalar
+1000.0
+# name RC9_REV
+# type: scalar
+1.0
+# name RC9_TRIM
+# type: scalar
+1500.0
+# name RC_ACRO_TH
+# type: scalar
+0.5
+# name RC_ARMSWITCH_TH
+# type: scalar
+0.25
+# name RC_ASSIST_TH
+# type: scalar
+0.25
+# name RC_AUTO_TH
+# type: scalar
+0.75
+# name RC_CHAN_CNT
+# type: scalar
+18
+# name RC_FAILS_THR
+# type: scalar
+0
+# name RC_GEAR_TH
+# type: scalar
+0.25
+# name RC_KILLSWITCH_TH
+# type: scalar
+0.25
+# name RC_LOITER_TH
+# type: scalar
+0.216000005603
+# name RC_MAP_ACRO_SW
+# type: scalar
+7
+# name RC_MAP_ARM_SW
+# type: scalar
+0
+# name RC_MAP_AUX1
+# type: scalar
+0
+# name RC_MAP_AUX2
+# type: scalar
+0
+# name RC_MAP_AUX3
+# type: scalar
+0
+# name RC_MAP_AUX4
+# type: scalar
+0
+# name RC_MAP_AUX5
+# type: scalar
+0
+# name RC_MAP_FAILSAFE
+# type: scalar
+0
+# name RC_MAP_FLAPS
+# type: scalar
+0
+# name RC_MAP_FLTMODE
+# type: scalar
+0
+# name RC_MAP_GEAR_SW
+# type: scalar
+0
+# name RC_MAP_KILL_SW
+# type: scalar
+8
+# name RC_MAP_LOITER_SW
+# type: scalar
+6
+# name RC_MAP_MODE_SW
+# type: scalar
+5
+# name RC_MAP_OFFB_SW
+# type: scalar
+0
+# name RC_MAP_PARAM1
+# type: scalar
+0
+# name RC_MAP_PARAM2
+# type: scalar
+0
+# name RC_MAP_PARAM3
+# type: scalar
+0
+# name RC_MAP_PITCH
+# type: scalar
+2
+# name RC_MAP_POSCTL_SW
+# type: scalar
+6
+# name RC_MAP_RATT_SW
+# type: scalar
+0
+# name RC_MAP_RETURN_SW
+# type: scalar
+6
+# name RC_MAP_ROLL
+# type: scalar
+1
+# name RC_MAP_THROTTLE
+# type: scalar
+3
+# name RC_MAP_TRANS_SW
+# type: scalar
+0
+# name RC_MAP_YAW
+# type: scalar
+4
+# name RC_OFFB_TH
+# type: scalar
+0.5
+# name RC_POSCTL_TH
+# type: scalar
+0.5
+# name RC_RATT_TH
+# type: scalar
+0.5
+# name RC_RETURN_TH
+# type: scalar
+0.634000003338
+# name RC_TH_USER
+# type: scalar
+1
+# name RC_TRANS_TH
+# type: scalar
+0.25
+# name RTL_DESCEND_ALT
+# type: scalar
+10.0
+# name RTL_LAND_DELAY
+# type: scalar
+-1.0
+# name RTL_MIN_DIST
+# type: scalar
+5.0
+# name RTL_RETURN_ALT
+# type: scalar
+30.0
+# name SDLOG_MODE
+# type: scalar
+0
+# name SDLOG_UTC_OFFSET
+# type: scalar
+420
+# name SDLOG_UUID
+# type: scalar
+1
+# name SENS_BARO_QNH
+# type: scalar
+1013.25
+# name SENS_BOARD_ROT
+# type: scalar
+0
+# name SENS_BOARD_X_OFF
+# type: scalar
+-0.751581728458
+# name SENS_BOARD_Y_OFF
+# type: scalar
+-0.80962908268
+# name SENS_BOARD_Z_OFF
+# type: scalar
+0.0
+# name SENS_DPRES_ANSC
+# type: scalar
+0.0
+# name SENS_DPRES_OFF
+# type: scalar
+0.0
+# name SENS_EN_LL40LS
+# type: scalar
+0
+# name SENS_EN_MB12XX
+# type: scalar
+0
+# name SENS_EN_SF0X
+# type: scalar
+0
+# name SENS_EN_SF1XX
+# type: scalar
+0
+# name SENS_EN_TRONE
+# type: scalar
+0
+# name SYS_AUTOCONFIG
+# type: scalar
+0
+# name SYS_AUTOSTART
+# type: scalar
+4050
+# name SYS_COMPANION
+# type: scalar
+0
+# name SYS_LOGGER
+# type: scalar
+1
+# name SYS_MC_EST_GROUP
+# type: scalar
+1
+# name SYS_PARAM_VER
+# type: scalar
+1
+# name SYS_RESTART_TYPE
+# type: scalar
+2
+# name SYS_STCK_EN
+# type: scalar
+0
+# name SYS_USE_IO
+# type: scalar
+1
+# name THR_MDL_FAC
+# type: scalar
+0.0
+# name TRIG_MODE
+# type: scalar
+0
+# name UAVCAN_ENABLE
+# type: scalar
+0
+# name VT_OPT_RECOV_EN
+# type: scalar
+0
+# name VT_TYPE
+# type: scalar
+0
+# name VT_WV_LND_EN
+# type: scalar
+0
+# name VT_WV_LTR_EN
+# type: scalar
+0
+# name VT_WV_TKO_EN
+# type: scalar
+0
+# name VT_WV_YAWR_SCL
+# type: scalar
+0.15000000596
