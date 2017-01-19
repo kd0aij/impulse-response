@@ -86,16 +86,18 @@ grid("on"); grid("minor");
 while (true)
   subplot(nplots,1,2);
   plot(g0t(sigRange), gyrof(sigRange,1), "-b", g0t(sigRange), gyrof(sigRange,2), "-r");
-  limits = axis;
-  for i = [1:ndrops]
-    if (droptimes(i) > limits(1) && droptimes(i) < limits(2))
-      hold on
-      plot([droptimes(i) droptimes(i)], [limits(3) limits(4)], 'mx-');
-    endif
-  endfor 
   axis("tight"); title("raw roll and pitch rate data subset");
   xlabel("seconds");
   grid("on"); grid("minor");
+  # this works in debug mode, but axis limits are wrong otherwise
+%  limits2 = axis
+%  keyboard
+%  for i = [1:ndrops]
+%    if (droptimes(i) > limits2(1) && droptimes(i) < limits2(2))
+%      hold on
+%      plot([droptimes(i) droptimes(i)], [limits2(3) limits2(4)], 'mx-');
+%    endif
+%  endfor 
 
   newStart = input("enter new startTime (return when done): ", "s");
   if length(newStart) == 0
