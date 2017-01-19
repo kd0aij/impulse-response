@@ -137,8 +137,8 @@ while (true)
 endwhile
 
 # analyze integration intervals and leave a complete accel data structure in the workspace
-%[samp_seq, at, a_interval] = loadFullAccel(basePath, prefix, sigRange);
-[samp_seq, at, a_interval] = loadFullGyro(basePath, prefix, sigRange);
+[samp_seq, at, a_interval] = loadFullAccel(basePath, prefix, sigRange);
+%[samp_seq, at, a_interval] = loadFullGyro(basePath, prefix, sigRange);
 nsamp = length(samp_seq);
 
 filename = [basePath prefix "sensor_accel_0.csv"];
