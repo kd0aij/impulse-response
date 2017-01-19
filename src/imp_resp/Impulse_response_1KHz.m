@@ -45,8 +45,13 @@ endfor
 # load the measured rates, rate setpoints and rate controls (actuator input)
 %[accelf, a0t, a_interval] = loadFullAccel(basePath, prefix);
 %[gyrof, g0t, g_interval] = loadFullGyro(basePath, prefix);
-[g0t, gyrof] = loadGyro_filt(prefix, 0, basePath);
+[g0t, gyrof, gyrodata] = loadGyro_filt(prefix, 0, basePath);
 [s0t, setpoint0] = loadVratesSP(prefix, 0, basePath);
+
+[average, variance, deltas, drop_lengths, drops] = interval_analysis(gyrodata.timestamp);
+ndrops = length(drop_lengths)
+droptimes = g0t(drops)
+droplengths = drop_lengths / 1e6
 
 nsamples = size(gyrof)(1);
 sigRange = [1:nsamples];
@@ -69,6 +74,11 @@ figure(figNum++, "Position", [1,200,1200,480]);
 subplot(nplots,1,1);
 # ticks, rollRate, pitchRate
 plot(g0t, gyrof(:,1), "-b", g0t, gyrof(:,2), "-r");
+limits = axis;
+for i = [1:ndrops]
+  hold on
+  plot([droptimes(i) droptimes(i)], [limits(3) limits(4)], 'mx-');
+endfor 
 axis("tight"); title("raw roll and pitch rate data extents");
 xlabel("seconds");
 grid("on"); grid("minor");
@@ -76,6 +86,13 @@ grid("on"); grid("minor");
 while (true)
   subplot(nplots,1,2);
   plot(g0t(sigRange), gyrof(sigRange,1), "-b", g0t(sigRange), gyrof(sigRange,2), "-r");
+  limits = axis;
+  for i = [1:ndrops]
+    if (droptimes(i) > limits(1) && droptimes(i) < limits(2))
+      hold on
+      plot([droptimes(i) droptimes(i)], [limits(3) limits(4)], 'mx-');
+    endif
+  endfor 
   axis("tight"); title("raw roll and pitch rate data subset");
   xlabel("seconds");
   grid("on"); grid("minor");
