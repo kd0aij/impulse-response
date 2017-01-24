@@ -3,10 +3,10 @@ function [accel, at, s_interval] = loadFullAccel(basePath, prefix, sigRange=[])
 filename = [basePath prefix "sensor_accel_0.csv"];
 accdata = tdfread(filename);
 
-if (length(sigRange) != 2)
-  sigRange = [1 : length(accdata.int_count)];
-elseif (sigRange(end) > length(accdata.int_count))
-  sigRange = [sigRange(1) : length(accdata.int_count)];
+if (length(sigRange) == 0)
+  sigRange = [1 : length(gyrodata.int_count)-1];
+%elseif (sigRange(end) > length(gyrodata.int_count)-1)
+%  sigRange = [sigRange(1) : length(gyrodata.int_count)-1];
 endif
 
 nrecs = length(accdata.int_count(sigRange))

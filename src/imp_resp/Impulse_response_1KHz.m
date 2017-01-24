@@ -22,7 +22,7 @@ impLen = 1.5
 
 # path to CSV files
 fflush (stdout);
-default_basePath = "/home/markw/gdrive/flightlogs/fast_gyro/S250/flight3";
+default_basePath = "/home/markw/gdrive/flightlogs/fast_gyro/";
 choice = input("load example dataset? (y/N):", "s");
 if length(choice) == 0 || choice == 'N' || choice == 'n'
   basePath = [uigetdir(default_basePath) "/"];
@@ -48,10 +48,15 @@ endfor
 [g0t, gyrof, gyrodata] = loadGyro_filt(prefix, 0, basePath);
 [s0t, setpoint0] = loadVratesSP(prefix, 0, basePath);
 
+# rotate gyro readings into body frame
+rtheta = pi/4;
+rotMatrix = [cos(rtheta) -sin(rtheta); sin(rtheta) cos(rtheta)]
+gyrof(:,1:2) = gyrof(:,1:2) * rotMatrix;
+
 [average, variance, deltas, drop_lengths, drops] = interval_analysis(gyrodata.timestamp);
 ndrops = length(drop_lengths)
-droptimes = g0t(drops)
-droplengths = drop_lengths / 1e6
+droptimes = g0t(drops);
+droplengths = drop_lengths / 1e6;
 
 nsamples = size(gyrof)(1);
 sigRange = [1:nsamples];
@@ -75,10 +80,11 @@ subplot(nplots,1,1);
 # ticks, rollRate, pitchRate
 plot(g0t, gyrof(:,1), "-b", g0t, gyrof(:,2), "-r");
 limits = axis;
+hold on
 for i = [1:ndrops]
-  hold on
   plot([droptimes(i) droptimes(i)], [limits(3) limits(4)], 'mx-');
 endfor 
+hold off
 axis("tight"); title("raw roll and pitch rate data extents");
 xlabel("seconds");
 grid("on"); grid("minor");
@@ -89,15 +95,14 @@ while (true)
   axis("tight"); title("raw roll and pitch rate data subset");
   xlabel("seconds");
   grid("on"); grid("minor");
-  # this works in debug mode, but axis limits are wrong otherwise
-%  limits2 = axis
-%  keyboard
-%  for i = [1:ndrops]
-%    if (droptimes(i) > limits2(1) && droptimes(i) < limits2(2))
-%      hold on
-%      plot([droptimes(i) droptimes(i)], [limits2(3) limits2(4)], 'mx-');
-%    endif
-%  endfor 
+  limits2 = axis
+  hold on
+  for i = [1:ndrops]
+    if (droptimes(i) > limits2(1) && droptimes(i) < limits2(2))
+      plot([droptimes(i) droptimes(i)], [limits2(3) limits2(4)], 'mx-');
+    endif
+  endfor 
+  hold off
 
   newStart = input("enter new startTime (return when done): ", "s");
   if length(newStart) == 0
@@ -118,6 +123,11 @@ endwhile
 # reload gyro data with specified sigRange (avoid dropouts)
 [gyrof, g0t, g_interval] = loadFullGyro(basePath, prefix, sigRange);
 sampRate = 1 / g_interval
+
+# rotate gyro readings into body frame
+rtheta = pi/4;
+rotMatrix = [cos(rtheta) -sin(rtheta); sin(rtheta) cos(rtheta)]
+gyrof(:,1:2) = gyrof(:,1:2) * rotMatrix;
 
 # resample to uniform rate, over the time range [startTime, endTime]
 [s0tu, setpoint0u] = resample2(startTime, endTime, s0t, setpoint0, sampRate, false);
@@ -301,7 +311,7 @@ grid on;
 %print([basePath "/" fprefix "tracking.png"], "-S1200,512")
 hgsave([basePath "/" fprefix "tracking.ofig"])
 
-input("hit return to continue");
+%input("hit return to continue");
 
 figPos = [200,400,1024,900];
 figure(figNum++, "Position", figPos);

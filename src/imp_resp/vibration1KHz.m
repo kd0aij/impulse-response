@@ -33,8 +33,8 @@ clear all;
 %default_basePath = "/home/markw/gdrive/flightlogs/fast_gyro/1KHz_synth/audacity/noise/uniform/";
 %default_basePath = "/home/markw/gdrive/flightlogs/fast_gyro/1KHz_synth/audacity/noise/orig/";
 %default_basePath = "/home/markw/gdrive/flightlogs/fast_gyro/1Khz/all_samp/";
-%default_basePath = "/home/markw/gdrive/flightlogs/fast_gyro/1Khz/all_samp/180hz/";
-default_basePath = "/home/markw/gdrive/flightlogs/fast_gyro/1Khz/all_samp/chirp/";
+default_basePath = "/home/markw/gdrive/flightlogs/fast_gyro/1Khz/all_samp/180hz-2/";
+%default_basePath = "/home/markw/gdrive/flightlogs/fast_gyro/1Khz/all_samp/chirp/";
 %default_basePath = "/home/markw/gdrive/flightlogs/fast_gyro/500Hz/180hz/";
 %default_basePath = "/home/markw/gdrive/flightlogs/fast_gyro/500Hz/450hz/";
 %default_basePath = "/home/markw/gdrive/flightlogs/fast_gyro/250Hz/180hz/";
@@ -82,43 +82,71 @@ for i = [1:size(files)(1)]
   endif
 endfor
 
-# load the accelerometer data
-#[a0t, accel0] = loadAccel_filt(prefix, 0, basePath);
-[a0t, accel0] = loadAccel_int(prefix, 0, basePath);
-#[a0t, accel0] = loadAccel_raw(prefix, 0, basePath);
-#[a0t, accel0] = loadGyro_int(prefix, 0, basePath);
-#[a0t, accel0] = loadSC_gyro(prefix, 0, basePath);
+# load the signal data
+choice = input("select accel or gyro data (0/1):");
+if (choice == 0 || choice == [])
+  sigType = "accel"
+  [s0t, signal, data] = loadAccel_filt(prefix, 0, basePath);
+  #[s0t, signal, data] = loadAccel_int(prefix, 0, basePath);
+else
+  sigType = "gyro"
+  [s0t, signal, data] = loadGyro_filt(prefix, 0, basePath);
+  #[s0t, signal, data] = loadGyro_int(prefix, 0, basePath);
+endif
 
-nsamples = size(accel0)(1);
+nsamples = size(signal)(1);
 sigRange = [1:nsamples];
-logduration = (a0t(end) - a0t(1))
+logduration = (s0t(end) - s0t(1))
 printf("log data rate: %6.1f Kbytes/sec\n", 1e-3 * logsize / logduration);
+
+[average, variance, deltas, drop_lengths, drops] = interval_analysis(data.timestamp);
+ndrops = length(drop_lengths)
+droptimes = s0t(drops);
+droplengths = drop_lengths / 1e6;
 
 # find timespan of data
 if (!exist('startTime') | !exist('endTime'))
-  startTime = a0t(1)
-  endTime = a0t(end)
+  startTime = s0t(1)
+  endTime = s0t(end)
 else
   # find index span of gyro data
   startOffset = 1;
-  while (a0t(startOffset) < startTime) startOffset++; endwhile
+  while (s0t(startOffset) < startTime) startOffset++; endwhile
   endOffset = startOffset;
-  while (a0t(endOffset) < endTime) endOffset++; endwhile
+  while (s0t(endOffset) < endTime) endOffset++; endwhile
   sigRange = [startOffset:endOffset];
 endif
 
 figNum = 1;
 figure(figNum++, "Position", [1,200,1200,480]);
 subplot(2,1,1);
-plot(a0t, accel0(:,1), "-r", a0t, accel0(:,2), "-g", a0t, accel0(:,3), "-b");
-axis("tight"); title("raw data extents");
+plot(s0t, signal(:,1), "-r", s0t, signal(:,2), "-g", s0t, signal(:,3), "-b");
+limits = axis;
+hold on
+for i = [1:ndrops]
+  plot([droptimes(i) droptimes(i)], [limits(3) limits(4)], 'mx-');
+endfor 
+hold off
+axis("tight"); title(["filtered " sigType " data extents"]);
 xlabel("seconds");
 grid("on"); grid("minor");
 
 while (true)
   subplot(2,1,2);
-  plot(a0t(sigRange), accel0(sigRange,1), "-r", a0t(sigRange), accel0(sigRange,2), "-g", a0t(sigRange), accel0(sigRange,3), "-b");
-  axis("tight"); title("raw data subset");
+  plot(s0t(sigRange), signal(sigRange,1), "-r", s0t(sigRange), signal(sigRange,2), "-g", s0t(sigRange), signal(sigRange,3), "-b");
+  drawnow;
+  # this works in debug mode, but axis limits are wrong otherwise
+  axis("tight")
+  limits2 = axis
+
+  hold on
+  for i = [1:ndrops]
+    if (droptimes(i) > limits2(1) && droptimes(i) < limits2(2))
+      plot([droptimes(i) droptimes(i)], [limits2(3) limits2(4)], 'mx-');
+    endif
+  endfor 
+  hold off
+  axis("tight"); title(["filtered " sigType " data subset"]);
   xlabel("seconds");
   grid("on"); grid("minor");
 
@@ -132,142 +160,37 @@ while (true)
 
   # find index span of gyro data
   startOffset = 1;
-  while (a0t(startOffset) < startTime) startOffset++; endwhile
+  while (s0t(startOffset) < startTime) startOffset++; endwhile
+  startOffset
   endOffset = startOffset;
-  while (a0t(endOffset) < endTime) endOffset++; endwhile
+  while (s0t(endOffset) < endTime) endOffset++; endwhile
+  endOffset
   sigRange = [startOffset:endOffset];
 endwhile
 
-# analyze integration intervals and leave a complete accel data structure in the workspace
-[samp_seq, at, a_interval] = loadFullAccel(basePath, prefix, sigRange);
-%[samp_seq, at, a_interval] = loadFullGyro(basePath, prefix, sigRange);
+# load 1KHz sample sequence for selected time range
+if (choice == 0)
+  [samp_seq, at, a_interval] = loadFullAccel(basePath, prefix, sigRange);
+else
+  [samp_seq, at, a_interval] = loadFullGyro(basePath, prefix, sigRange);
+endif
+
 nsamp = length(samp_seq);
 
-filename = [basePath prefix "sensor_accel_0.csv"];
-printf ("accel data log file: %s, data struct accdata\n", filename);
-accdata = tdfread(filename);
-acct = accdata.timestamp(sigRange) / 1e6;
-acct -= acct(1);
-dts = accdata.integral_dt(sigRange);
-printf("accelerometer integration interval analysis\n");
-printf("min: %f msec, freq: %f Hz\n", 1e-3*min(dts), 1e6 / min(dts));
-printf("max: %f msec, freq: %f Hz\n", 1e-3*max(dts), 1e6 / max(dts));
-printf("mean: %f msec, freq: %f Hz\n", 1e-3*mean(dts), 1e6 / mean(dts));
-
-figure(figNum++, "Position", [1,300,1200,200]);
-plot(acct-acct(1), dts, '.');
-title("integration intervals");
-hgsave([basePath "/int_intervals.ofig"])
-
-
-# analyze logging intervals and dropouts
-printf("log interval analysis\n");
-[average, variance, deltas, drop_lengths, drops] = ...
-  interval_analysis(acct);
-printf("average log rate: %f Hz\n", 1 / average);
-ndrops = length(drop_lengths)
-if ndrops > 0  
-  avgdrop = mean(drop_lengths)
-  mindrop = min(drop_lengths)
-  maxdrop = max(drop_lengths)
-  total_drop = sum(drop_lengths)
-  percent_drop = 100 * total_drop / (endTime - startTime)
-endif
-
-x_integral_sub = accdata.x_integral(sigRange);
-y_integral_sub = accdata.y_integral(sigRange);
-z_integral_sub = accdata.z_integral(sigRange);
-dt_sub = accdata.integral_dt(sigRange);
-
-figure(figNum++, "Position", [1,400,1200,600]);
-subplot(3,1,1);
-plot(acct, (1e6 * x_integral_sub ./ dt_sub), '.-',
-    acct, 5e2 * x_integral_sub, 'o',
-    acct(drops), 5e2 * x_integral_sub(drops) - .1, 'x');
-title("x accel data");
-if ndrops > 0  
-  legend("int/dt", "int", "drop", "Location", "northeast");
-else
-  legend("int/dt", "int", "Location", "northeast");
-endif
-subplot(3,1,2);
-plot(acct, (1e6 * y_integral_sub ./ dt_sub), '.-',
-    acct, 5e2 * y_integral_sub, 'o',
-    acct(drops), 5e2 * y_integral_sub(drops) - .1, 'x');
-title("y accel data");
-subplot(3,1,3);
-plot(acct, (1e6 * z_integral_sub ./ dt_sub), '.-',
-    acct, 5e2 * z_integral_sub, 'o',
-    acct(drops), 5e2 * z_integral_sub(drops) - .1, 'x');
-title("z accel data");
-hgsave([basePath "/acceldata.ofig"])
-
-xintsub = 5e2 * accdata.x_integral(sigRange);
-xsub = 1e6 * accdata.x_integral(sigRange) ./ accdata.integral_dt(sigRange);
-
-yintsub = 5e2 * accdata.y_integral(sigRange);
-ysub = 1e6 * accdata.y_integral(sigRange) ./ accdata.integral_dt(sigRange);
-
-zintsub = 5e2 * accdata.z_integral(sigRange);
-zsub = 1e6 * accdata.z_integral(sigRange) ./ accdata.integral_dt(sigRange);
-
-# resample to uniform rate, over the time range [startTime, endTime]
-[a0tu, accel0u] = resample2(startTime, endTime, a0t, accel0, sampRate);
-
-xvar = var(accel0u(:,1))
-yvar = var(accel0u(:,2))
-zvar = var(accel0u(:,3))
-
 # get FFT and calculate frequency span
-fftLen = size(accel0u)(1)
-accel_fft = fft(accel0u - mean(accel0u));
+fftLen = size(samp_seq)(1)
+accel_fft = fft(samp_seq - mean(samp_seq));
 nyquist_freq = sampRate/2
 freq_res = sampRate / fftLen
 # ignore DC term
 index_range = [2:ceil(fftLen/2)];
 freq_range = -1 + index_range * sampRate / fftLen;
 
-%# construct complete sample sequence at 1KHz sample rate
-%duration = (endTime - startTime)
-%nrecs = length(accdata.int_count(sigRange))
-%nsamp = sum(accdata.int_count(sigRange))
-%act_samp_rate = nsamp / duration
-%samp_seq = -10 * ones(nsamp,3);
-%samp_times = startTime + [0:nsamp-1]' * a_interval;
-%j = 1;
-%for i = sigRange
-%  if (accdata.int_count(i) >= 1)
-%    samp_seq(j,1)   = accdata.x_in_0_(i);
-%    samp_seq(j,2)   = accdata.y_in_0_(i);
-%    samp_seq(j++,3) = accdata.z_in_0_(i);
-%  endif
-%  if (accdata.int_count(i) >= 2)
-%    samp_seq(j,1)   = accdata.x_in_1_(i);
-%    samp_seq(j,2)   = accdata.y_in_1_(i);
-%    samp_seq(j++,3) = accdata.z_in_1_(i);
-%  endif
-%  if (accdata.int_count(i) >= 3)
-%    samp_seq(j,1)   = accdata.x_in_2_(i);
-%    samp_seq(j,2)   = accdata.y_in_2_(i);
-%    samp_seq(j++,3) = accdata.z_in_2_(i);
-%  endif
-%  if (accdata.int_count(i) >= 4)
-%    samp_seq(j,1)   = accdata.x_in_3_(i);
-%    samp_seq(j,2)   = accdata.y_in_3_(i);
-%    samp_seq(j++,3) = accdata.z_in_3_(i);
-%  endif
-%  if (accdata.int_count(i) >= 5)
-%    samp_seq(j,1)   = accdata.x_in_4_(i);
-%    samp_seq(j,2)   = accdata.y_in_4_(i);
-%    samp_seq(j++,3) = accdata.z_in_4_(i);
-%  endif
-%endfor
-
 figure(figNum++, "Position", [1,300,1200,300]);
 plot(at, samp_seq);
 legend(["x";"y";"z"]);
 axis("tight"); grid on;
-title("accelerometer signals");
+title([sigType " signals"]);
 xlabel("seconds");
 ylabel("m/sec/sec");
 
@@ -276,16 +199,6 @@ zfreq_range = zindex_range * 1000 / nsamp;
 zseq_fft = fft(samp_seq - mean(samp_seq));
 zseq_fft = abs(zseq_fft(zindex_range,:));
 
-%% integrate and decimate
-%oddsamples = [1:2:nsamp];
-%evensamples = [2:2:nsamp];
-%ndsamp = length(evensamples);
-%zdec = .5 * (samp_seq(oddsamples(1:ndsamp)) + samp_seq(evensamples));
-%zdindex_range = [2:ceil(ndsamp/2)];
-%zdfreq_range = -1 + zdindex_range * 500 / ndsamp;
-%zdseq_fft = fft(zdec - mean(zdec));
-%zdseq_fft = abs(zdseq_fft(zdindex_range));
-
 x_fft = abs(accel_fft(index_range,1));
 y_fft = abs(accel_fft(index_range,2));
 z_fft = abs(accel_fft(index_range,3));
@@ -293,49 +206,36 @@ fscl = max(z_fft);
 
 figure(figNum++, "Position", [1,300,1200,300]);
 plot(
-%     freq_range, 20 * log10(x_fft / fscl), 'r',
-%     freq_range, 20 * log10(y_fft / fscl), 'g',
+     freq_range, 20 * log10(x_fft / fscl), 'r',
+     freq_range, 20 * log10(y_fft / fscl), 'g',
      freq_range, 20 * log10(z_fft / fscl), 'b'
      );
-title("vibration spectrum");
-%legend("x", "y", "z", "Location", "northwest");
+title([sigType " vibration spectrum"]);
+legend("x", "y", "z", "Location", "northeast");
 xlabel("Hz");
 axis("tight"); grid on;
 hgsave([basePath "/vibration_spectrum.ofig"])
 
 absmax = max(max(zseq_fft));
-figure(figNum++, "Position", [1,300,1200,300]);
-plot(
-     zfreq_range, 20 * log10(zseq_fft / absmax)
-%     ,
-%     zdfreq_range, 20 * log10(zdseq_fft / max(zdseq_fft)), 'g.'
-     );
-title("zseq spectrum");
-legend(["x";"y";"z"]);
-xlabel("Hz");
-axis([0 500 -60 0]);
-grid on;
-hgsave([basePath "/zseq_spectrum.ofig"])
-
 figure(figNum++, "Position", [1,300,1200,900]);
 subplot(3,1,1);
 plot(zfreq_range, 20 * log10(zseq_fft(:,1) / absmax), 'r');
 axis([0 500 -60 0]);
 grid on;
 xlabel("Hz"); ylabel("dB");
-title("vibration spectrum x");
+title([sigType " vibration spectrum x"]);
 subplot(3,1,2);
 plot(zfreq_range, 20 * log10(zseq_fft(:,2) / absmax), 'g');
 axis([0 500 -60 0]);
 grid on;
 xlabel("Hz"); ylabel("dB");
-title("vibration spectrum y");
+title([sigType " vibration spectrum y"]);
 subplot(3,1,3);
 plot(zfreq_range, 20 * log10(zseq_fft(:,3) / absmax), 'b');
 axis([0 500 -60 0]);
 grid on;
 xlabel("Hz"); ylabel("dB");
-title("vibration spectrum z");
-hgsave([basePath "/vibration_spectrum2.ofig"])
+title([sigType " vibration spectrum z"]);
+hgsave([basePath sigType "_vibration_spectrum.ofig"])
 
 save ("-binary", [basePath "workspace.bin"])

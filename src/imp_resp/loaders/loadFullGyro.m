@@ -11,8 +11,8 @@ endif
 
 [average, variance, deltas, drop_lengths, drops] = interval_analysis(gyrodata.timestamp);
 ndrops = length(drop_lengths)
-droptimes = gyrodata.timestamp(drops) / 1e6
-droplengths = drop_lengths / 1e6
+droptimes = gyrodata.timestamp(drops) / 1e6;
+droplengths = drop_lengths / 1e6;
 
 if find(drops(sigRange))
   disp("error: dropout within sigRange");
