@@ -33,7 +33,7 @@ clear all;
 %default_basePath = "/home/markw/gdrive/flightlogs/fast_gyro/1KHz_synth/audacity/noise/uniform/";
 %default_basePath = "/home/markw/gdrive/flightlogs/fast_gyro/1KHz_synth/audacity/noise/orig/";
 %default_basePath = "/home/markw/gdrive/flightlogs/fast_gyro/1Khz/all_samp/";
-default_basePath = "/home/markw/gdrive/flightlogs/fast_gyro/1Khz/all_samp/180hz-2/";
+%default_basePath = "/home/markw/gdrive/flightlogs/fast_gyro/1Khz/all_samp/180hz-2/";
 %default_basePath = "/home/markw/gdrive/flightlogs/fast_gyro/1Khz/all_samp/chirp/";
 %default_basePath = "/home/markw/gdrive/flightlogs/fast_gyro/500Hz/180hz/";
 %default_basePath = "/home/markw/gdrive/flightlogs/fast_gyro/500Hz/450hz/";
@@ -45,6 +45,7 @@ default_basePath = "/home/markw/gdrive/flightlogs/fast_gyro/1Khz/all_samp/180hz-
 %default_basePath = "/home/markw/gdrive/flightlogs/fast_gyro/S250/flight3/";
 %default_basePath = "/home/markw/gdrive/flightlogs/fast_gyro/AeroQuad/2017-01-21-3/";
 %default_basePath = "/home/markw/gdrive/flightlogs/fast_gyro/AeroQuad/bench1/";
+default_basePath = "/home/markw/gdrive/flightlogs/fast_gyro/fast_sensor_log_rebased/180Hz/";
 
 %startTime = 40
 %endTime = 60
@@ -58,7 +59,7 @@ rad2deg = 180/pi;
 
 # set default run parameters
 # desired uniform sample rate in Hz; should be less than average sample rate
-sampRate = 250
+sampRate = 1000
 
 # set to true when start/endTime are correct
 rangeSelected = 0;
@@ -187,7 +188,7 @@ index_range = [2:ceil(fftLen/2)];
 freq_range = -1 + index_range * sampRate / fftLen;
 
 figure(figNum++, "Position", [1,300,1200,300]);
-plot(at, samp_seq);
+plot(at, samp_seq, '.-');
 legend(["x";"y";"z"]);
 axis("tight"); grid on;
 title([sigType " signals"]);

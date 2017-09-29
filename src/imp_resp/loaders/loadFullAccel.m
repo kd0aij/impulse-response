@@ -11,10 +11,10 @@ endif
 
 nrecs = length(accdata.int_count(sigRange))
 nsamp = sum(accdata.int_count(sigRange))
-duration = accdata.timestamp(end) - accdata.timestamp(1);
+duration = accdata.timestamp(sigRange(end)) - accdata.timestamp(sigRange(1))
 s_interval = 1e-6 * duration / (nsamp - accdata.int_count(1))
 accel = zeros(nsamp,3);
-at = 1e-6 * accdata.timestamp(2) + s_interval * ([1:nsamp]' - accdata.int_count(1));
+at = 1e-6 * accdata.timestamp(sigRange(1)) + s_interval * ([1:nsamp]' - accdata.int_count(1));
 
 j = 1;
 for i = sigRange

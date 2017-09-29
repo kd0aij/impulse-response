@@ -57,14 +57,16 @@ for i = [1:size(files)(1)]
 endfor
 
 # load the measured rates, rate setpoints and rate controls (actuator input)
-%[g0t, gyro0] = loadSC_gyro(prefix, 0, basePath);
-[g0t, gyro0] = loadGyro_int(prefix, 0, basePath);
+[g0t, gyro0] = loadSC_gyro(prefix, 0, basePath);
+%[g0t, gyro0] = loadGyro_int(prefix, 0, basePath);
 [s0t, setpoint0] = loadVratesSP(prefix, 0, basePath);
 
 # rotate gyro readings into body frame
-rtheta = pi/4;
-rotMatrix = [cos(rtheta) -sin(rtheta); sin(rtheta) cos(rtheta)]
-gyro0(:,1:2) = gyro0(:,1:2) * rotMatrix;
+if false
+  rtheta = pi/4;
+  rotMatrix = [cos(rtheta) -sin(rtheta); sin(rtheta) cos(rtheta)]
+  gyro0(:,1:2) = gyro0(:,1:2) * rotMatrix;
+endif
 
 # check for optional actuator and attitude data
 filename = [basePath prefix "actuator_controls_0_0.csv"];
@@ -72,9 +74,10 @@ printf ("input file: %s\n", filename);
 [info, err, msg] = stat (filename);
 if err != -1
   rateOnly = false;
-  sampRate = 100
+  sampRate = 400
   nplots = 3
 endif
+%rateOnly = true;
 
 if not(rateOnly)
   [c0t, control0] = loadControlGroup0(prefix, 0, basePath);
